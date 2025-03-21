@@ -32,4 +32,4 @@ this is a local web-based system made for xampp, it's supposed to help small biz
 
 ---
 
-that’s it, go touch grass or smth
+that’s it thanku
