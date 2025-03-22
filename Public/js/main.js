@@ -49,8 +49,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // We'll do a short delay to mimic thinking time
     setTimeout(() => {
       // Remove or replace any 'AI is typing...' placeholders
-      const aiReply = getFakeAIResponse(userMessage);
-      createChatBubble(aiReply, 'ai');
+      // Show a loading bubble
+      const loadingBubble = createChatBubble("...", "ai");
+
+      // Send message to chat.php via fetch
+      fetch('chat.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(response => response.json())
+      .then(data => {
+        loadingBubble.textContent = data.reply;
+      })
+      .catch(err => {
+        loadingBubble.textContent = "⚠️ Error: Unable to reach AI server.";
+      });
     }, 800);
   });
 
