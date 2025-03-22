@@ -1,0 +1,26 @@
+**Project Documentation Draft**
+
+# **Salesflow**
+
+## **Objective**
+The system is designed to assist new and small business owners in efficiently managing their income and product trends. By providing an easy-to-use platform for tracking sales and analyzing trends, the system aims to help entrepreneurs make informed financial decisions and optimize their inventory.
+
+## **Goal**
+- To provide a streamlined interface for entering and tracking income based on product sales.
+- To generate automatic analytics highlighting trending and underperforming products.
+- To integrate AI-driven insights that assist users in making strategic business decisions.
+- To simplify business financial tracking, making it accessible even for those with little experience in finance management.
+
+## **Scope**
+- Users can input **product names, income amounts, and dates** to keep track of their sales records.
+- The system will process this data and display **analytics through a hover-based interactive dashboard**.
+- The system will identify and highlight **trending products** (high income) and **underperforming products** (zero income).
+- AI-powered features will analyze product data and provide **insights and recommendations** based on trends.
+- The system will focus primarily on **small businesses and startups** that need a simple yet effective tracking tool.
+
+## **Limitations**
+- The system **does not handle complex financial calculations** like tax computation or expense management.
+- It is limited to tracking **sales trends and product income only** (no advanced accounting features like profit/loss reports).
+- AI suggestions are based only on **historical user-input data** and do not incorporate external market trends.
+- The system will initially be **web-based**, with no mobile app version.
+- Requires an **internet connection** to access AI features and analytics.

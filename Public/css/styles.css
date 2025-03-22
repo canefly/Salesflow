@@ -1,0 +1,178 @@
+/* =====================================================
+   ✅ Base Reset & Global Settings
+===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #222;
+}
+
+/* =====================================================
+   ✅ Navbar
+===================================================== */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #0d6efd !important;
+}
+
+/* Shrink effect when scrolling */
+.navbar.navbar-shrink {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #111 !important;
+    transition: all 0.3s ease;
+}
+
+/* =====================================================
+   ✅ Hero Section
+===================================================== */
+.hero {
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #0d6efd, #6f42c1, #198754, #0dcaf0);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
+    padding: 80px 20px;
+    position: relative;
+    text-align: center;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hero h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-top: 15px;
+}
+
+/* =====================================================
+   ✅ Features Section
+===================================================== */
+.features h2 {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.card {
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================================
+   ✅ Floating AI Chat Button
+===================================================== */
+#ai-chat-button {
+    box-shadow: 0 0 12px rgba(13, 110, 253, 0.6);
+    transition: all 0.3s ease;
+}
+
+#ai-chat-button:hover {
+    background-color: #0b5ed7;
+    box-shadow: 0 0 20px rgba(13, 110, 253, 0.8);
+}
+
+/* =====================================================
+   ✅ Footer
+===================================================== */
+footer {
+    font-size: 0.9rem;
+    background-color: #1c1c1c;
+    color: #eee;
+}
+
+/* =====================================================
+   ✅ Responsive Tweaks (Mobile First)
+===================================================== */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .btn-lg {
+        width: 100%;
+    }
+}
+
+/* =====================================================
+   ✅ Utility Classes (Reusable)
+===================================================== */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================================
+   ✅ Messenger ui
+===================================================== */
+
+/* === Messenger-Style Chat Bubble === */
+.chat-bubble {
+    margin: 8px 0;
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  
+  /* User bubble: Align right, different color */
+  .chat-bubble.user {
+    background-color: #0d6efd;
+    color: #fff;
+    margin-left: auto;
+    margin-right: 0; /* ensures alignment to the right */
+  }
+  
+  /* AI bubble: Align left, lighter color */
+  .chat-bubble.ai {
+    background-color: #f1f1f1;
+    color: #000;
+    margin-left: 0;
+    margin-right: auto; /* ensures alignment to the left */
+  }
+  
