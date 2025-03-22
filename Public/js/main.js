@@ -47,13 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show an AI is typing... bubble (optional) or skip directly to final reply
     // We'll do a short delay to mimic thinking time
-    setTimeout(() => {
-      // Remove or replace any 'AI is typing...' placeholders
-      // Show a loading bubble
-      const loadingBubble = createChatBubble("...", "ai");
+    const loadingBubble = createChatBubble("...", "ai");
 
-      // Send message to chat.php via fetch
-      fetch('chat.php', {
+    setTimeout(() => {
+      fetch('../Backend/chat.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage })
@@ -64,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(err => {
         loadingBubble.textContent = "⚠️ Error: Unable to reach AI server.";
+        console.error("Fetch error:", err);
       });
     }, 800);
   });
@@ -80,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto-scroll to the bottom whenever a new bubble appears
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    return bubble;
   }
 
   // ========== 5. FAKE AI REPLY GENERATOR ==========
