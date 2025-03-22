@@ -1,73 +1,90 @@
-// Inline comments included for clarity
+document.addEventListener('DOMContentLoaded', () => {
+  /* 
+    All JavaScript for your site, including the modern chat panel logic
+    and inline code comments to explain each part.
+  */
 
-// 1. Get references to elements
-const chatButton = document.getElementById('ai-chat-button'); // Floating chat icon
-const chatPanel = document.getElementById('ai-chat-panel');   // The messenger-style chat box
-const closeBtn = document.getElementById('chat-close-btn');   // The 'X' button in chat header
-const sendBtn = document.getElementById('chat-send-btn');     // The Send button
-const chatInput = document.getElementById('chat-input');      // User's message input
-const chatMessages = document.getElementById('chat-messages');// Container for chat bubbles
+  // ========== 1. QUERY SELECTORS ==========
+  const chatButton   = document.getElementById('ai-chat-button');  // The floating chat icon
+  const chatPanel    = document.getElementById('ai-chat-panel');   // The entire chat panel (aside)
+  const closeBtn     = document.getElementById('chat-close-btn');  // The 'X' close button
+  const sendBtn      = document.getElementById('chat-send-btn');   // Send button
+  const chatInput    = document.getElementById('chat-input');      // User text input
+  const chatMessages = document.getElementById('chat-messages');   // Container for bubble messages
 
-// 2. Toggle chat panel visibility
-chatButton.addEventListener('click', () => {
-  // If hidden, show; if shown, hide
-  if (chatPanel.style.display === 'none' || chatPanel.style.display === '') {
-    chatPanel.style.display = 'block';
-  } else {
-    chatPanel.style.display = 'none';
-  }
-});
+  // Example: Navbar links for active state highlight
+  const navLinks = document.querySelectorAll('.nav-link');
 
-// 3. Close chat panel when the 'X' is clicked
-closeBtn.addEventListener('click', () => {
-  chatPanel.style.display = 'none';
-});
-
-// 4. Handle sending a message
-sendBtn.addEventListener('click', () => {
-  const userMessage = chatInput.value.trim();
-  if (!userMessage) return; // Don't send empty messages
-
-  // (A) Create a user bubble
-  createChatBubble(userMessage, 'user');
-
-  // (B) Clear the input
-  chatInput.value = '';
-
-  // (C) Fake AI Response (replace later with real API call)
-  setTimeout(() => {
-    const aiReply = getFakeAIResponse(userMessage);
-    createChatBubble(aiReply, 'ai');
-  }, 1000);
-});
-
-// 5. Function to create a chat bubble and append to chatMessages
-function createChatBubble(message, sender = 'user') {
-  // Create a div for bubble
-  const bubble = document.createElement('div');
-  bubble.classList.add('chat-bubble', sender);
-  bubble.textContent = message;
-
-  // Append it to messages container
-  chatMessages.appendChild(bubble);
-
-  // Auto-scroll to bottom
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// 6. Fake AI response generator
-function getFakeAIResponse(userMsg) {
-  // You can make a real fetch() call to OpenAI or a local server here
-  // For now, let's do a simple placeholder
-  return `AI says: "You asked about '${userMsg}' — great question!"`;
-}
-
-// ==== BONUS: Navbar or other site-wide logic here if needed ====
-
-// Example: Active link highlight
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', function () {
-    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-    this.classList.add('active');
+  // ========== 2. CHAT PANEL TOGGLE ==========
+  chatButton.addEventListener('click', () => {
+    // Toggle the 'show-panel' class on the chat panel
+    const isHidden = !chatPanel.classList.contains('show-panel');
+    if (isHidden) {
+      // Show the panel
+      chatPanel.classList.add('show-panel');
+    } else {
+      // Hide the panel
+      chatPanel.classList.remove('show-panel');
+    }
   });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      chatPanel.classList.remove('show-panel');
+    });
+  }
+
+  // ========== 3. SEND MESSAGE LOGIC ==========
+  sendBtn.addEventListener('click', () => {
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) return;  // Ignore empty messages
+
+    // Create a user bubble in the chat
+    createChatBubble(userMessage, 'user');
+
+    // Clear the input
+    chatInput.value = '';
+
+    // Show an AI is typing... bubble (optional) or skip directly to final reply
+    // We'll do a short delay to mimic thinking time
+    setTimeout(() => {
+      // Remove or replace any 'AI is typing...' placeholders
+      const aiReply = getFakeAIResponse(userMessage);
+      createChatBubble(aiReply, 'ai');
+    }, 800);
+  });
+
+  // ========== 4. CREATE CHAT BUBBLE FUNCTION ==========
+  function createChatBubble(message, sender = 'user') {
+    // Make a div for the bubble
+    const bubble = document.createElement('div');
+    bubble.classList.add('chat-bubble', sender);
+    bubble.textContent = message;
+
+    // Append bubble to chat
+    chatMessages.appendChild(bubble);
+
+    // Auto-scroll to the bottom whenever a new bubble appears
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // ========== 5. FAKE AI REPLY GENERATOR ==========
+  function getFakeAIResponse(userMsg) {
+    // In production, you'd do a fetch() call to your AI endpoint here
+    // For demonstration, return a placeholder
+    return `AI says: \"You asked about '${userMsg}'. Great question!\"`;
+  }
+
+  // ========== 6. NAVBAR ACTIVE LINK LOGIC ==========
+  navLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      navLinks.forEach(el => el.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // ========== 7. OPTIONAL EXTRAS ==========
+  // - Animate chat button
+  // - Detect user pressing 'Enter' in chat input
+  // - Replace getFakeAIResponse with real backend calls
 });
