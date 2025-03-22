@@ -32,7 +32,6 @@ body {
     color: #0d6efd !important;
 }
 
-/* Shrink effect when scrolling */
 .navbar.navbar-shrink {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -41,33 +40,55 @@ body {
 }
 
 /* =====================================================
-   ✅ Hero Section
+   ✅ Hero Section with Mesh Gradient
 ===================================================== */
 .hero {
     min-height: 100vh;
-    background: linear-gradient(-45deg, #0d6efd, #6f42c1, #198754, #0dcaf0);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+    background:
+      radial-gradient(circle at 20% 30%, #001f4d 0%, transparent 40%),
+      radial-gradient(circle at 60% 20%, #004080 0%, transparent 50%),
+      radial-gradient(circle at 80% 60%, #0074d9 0%, transparent 45%),
+      radial-gradient(circle at 30% 80%, #00bfff 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, #0061b3 0%, transparent 40%),
+      radial-gradient(circle at 70% 70%, #003366 0%, transparent 50%),
+      radial-gradient(circle at 10% 90%, #0096c7 0%, transparent 45%);
+    background-color: #001f4d;
+    background-size: 250% 250%;
+    animation: meshFlow 30s ease-in-out infinite;
     color: white;
     padding: 80px 20px;
     position: relative;
     text-align: center;
+    overflow: hidden;
 }
 
-@keyframes gradientBG {
-    0%   { background-position: 0%   50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0%   50%; }
+@keyframes meshFlow {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 75%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 25%; }
+    100% { background-position: 0% 50%; }
 }
 
 .hero h1 {
     font-size: 3rem;
     line-height: 1.2;
+    background: linear-gradient(135deg, #ffffff, #d1eaff);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.15);
+    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 
 .hero p {
     font-size: 1.25rem;
     margin-top: 15px;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* =====================================================
@@ -96,6 +117,7 @@ body {
 .chat-toggle-btn {
     box-shadow: 0 0 12px rgba(13, 110, 253, 0.6);
     transition: all 0.3s ease;
+    z-index: 9999;
 }
 
 .chat-toggle-btn:hover {
@@ -106,10 +128,6 @@ body {
 /* =====================================================
    ✅ Messenger-Style Chat Panel
 ===================================================== */
-/* 
-   .chat-panel is the container for the entire chat UI. 
-   We'll add transitions for a smoother open/close effect.
-*/
 .chat-panel {
     position: fixed;
     right: 30px;
@@ -117,33 +135,29 @@ body {
     width: 320px;
     max-height: 480px;
     display: none;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(16px);
     border-radius: 16px;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-  }
+    font-size: 1rem;
+}
 
 .chat-panel.show-panel {
-    display: block;       /* or could use transform scale(1), etc. */
-    opacity: 1;
-    transform: scale(1);
+    display: block;
 }
 
 .chat-header {
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+    font-size: 1rem;
 }
 
 .chat-body {
-    /* We might give it a flex property if we want to expand. */
     padding: 10px;
-    max-height: 300px;  /* Adjust as needed */
-    overflow-y: auto;   
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .chat-footer {
@@ -151,25 +165,19 @@ body {
     border-bottom-right-radius: 16px;
 }
 
-/* Bubble container is chat-messages */
-#chat-messages {
-    /* Additional styling if needed */
-}
-
 /* =====================================================
    ✅ Chat Bubbles
 ===================================================== */
 .chat-bubble {
-    margin: 8px 0;
+    margin: 6px 0;
     padding: 10px 14px;
     border-radius: 18px;
     max-width: 75%;
     word-wrap: break-word;
     line-height: 1.4;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
-/* User bubble: right-aligned, brand color */
 .chat-bubble.user {
     background-color: #0d6efd;
     color: #fff;
@@ -177,7 +185,6 @@ body {
     margin-right: 0;
 }
 
-/* AI bubble: left-aligned, neutral color */
 .chat-bubble.ai {
     background-color: #f1f1f1;
     color: #000;
@@ -203,15 +210,13 @@ footer {
     }
 
     .hero p {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .btn-lg {
         width: 100%;
     }
 
-    /* Chat panel for smaller screens 
-       Move or scale if needed */
     .chat-panel {
         right: 10px;
         width: 90%;
@@ -236,3 +241,36 @@ footer {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+/* =====================================================
+   ✅ svg
+===================================================== */
+
+.wave-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .data-waves {
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+  
+  .data-waves path {
+    filter: blur(0.3px); /* adds a soft glow feel */
+    transition: stroke 0.3s ease;
+  }  
+
+  @keyframes slowWaveMove {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(10px); }
+    100% { transform: translateY(0px); }
+  }
+  
