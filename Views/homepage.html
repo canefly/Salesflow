@@ -13,6 +13,8 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="../public/css/styles.css" />
+  <link rel="stylesheet" href="../public/css/floatingMoney.css">
+
 
   <!-- AOS (Animate On Scroll) for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -20,6 +22,7 @@
 <body>
   <!-- JavaScript for interactivity (navbar, chat, etc.) -->
   <script src="../public/js/main.js"></script>
+  <script src="../public/js/floatingMoney.js" defer></script>
 
   <!-- Floating Chat Button -->
   <button
@@ -96,7 +99,7 @@
     </div>
 
     <div class="wave-overlay">
-        <svg class="data-waves" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <svg id="hero-wave" class="data-waves" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 
             <defs>
                 <filter id="waveFocusBlur" x="-50%" y="-50%" width="200%" height="200%">

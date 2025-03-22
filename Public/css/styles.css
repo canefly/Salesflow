@@ -274,3 +274,7 @@ footer {
     100% { transform: translateY(0px); }
   }
   
+  #data-waves, #hero-wave {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+}
