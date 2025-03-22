@@ -3,23 +3,26 @@ header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// ✅ New KoboldAI endpoint (v1!)
+// KoboldAI Endpoint
 $apiUrl = 'https://th-dimensions-national-coat.trycloudflare.com/v1';
 
-// 🌐 Grab the user message from JS
+// Get user input
 $data = json_decode(file_get_contents('php://input'), true);
 $userMessage = $data['message'] ?? '';
 
-// 📦 Prepare the payload based on KoboldAPI v1
+// Format prompt
+$prompt = "Cane: $userMessage\nSeraphina: ";
+
+// Build payload
 $payload = [
-    'prompt' => $userMessage,
-    'max_length' => 120,
-    'temperature' => 0.7,
+    'prompt' => $prompt,
+    'max_new_tokens' => 120,
+    'temperature' => 1,
     'top_p' => 0.9,
-    'stop_sequence' => ["\n"]
+    'stop' => ["\nCane:"]
 ];
 
-// 🌍 cURL request
+// Send request
 $ch = curl_init($apiUrl);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
@@ -29,19 +32,16 @@ curl_setopt_array($ch, [
 ]);
 
 $response = curl_exec($ch);
-if ($response === false) {
-    echo json_encode(['reply' => '⚠️ Error: ' . curl_error($ch)]);
-    exit;
-}
 curl_close($ch);
 
-// 🐾 Try multiple known structures
-file_put_contents('kobo_debug.json', $response); // log for dev
+if (!$response) {
+    echo json_encode(['reply' => '⚠️ No response from AI (cURL error).']);
+    exit;
+}
 
+// Decode
 $result = json_decode($response, true);
-$aiReply = $result['results'][0]['text']
-        ?? $result['text']
-        ?? '⚠️ No response from AI.';
+$aiReply = $result['choices'][0]['text'] ?? '⚠️ No reply found.';
 
 echo json_encode(['reply' => $aiReply]);
 ?>
