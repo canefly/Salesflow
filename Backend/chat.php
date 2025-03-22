@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Define endpoints
-$koboldBaseUrl = 'https://th-dimensions-national-coat.trycloudflare.com/api';
-$openaiBaseUrl   = 'https://th-dimensions-national-coat.trycloudflare.com/v1';
+$koboldBaseUrl = 'https://upload-fashion-nevada-poem.trycloudflare.com/api';
+$openaiBaseUrl   = 'https://upload-fashion-nevada-poem.trycloudflare.com/v1';
 
 // Function to ping an endpoint (using /extra/version)
 function pingEndpoint($baseUrl, $suffix = '/extra/version') {
@@ -26,14 +26,14 @@ function pingEndpoint($baseUrl, $suffix = '/extra/version') {
     return json_decode($response, true);
 }
 
-// Ping the Kobold API first
+// Ping the Kobold API first.
 $koboldConfig = pingEndpoint($koboldBaseUrl);
 if (!isset($koboldConfig['error']) && isset($koboldConfig['result'])) {
     $selectedEndpoint = $koboldBaseUrl;
     $endpointType = 'Kobold API';
     $generateSuffix = '/generate'; // Kobold generation endpoint
 } else {
-    // Fallback to OpenAI Compatible API
+    // Fallback to OpenAI Compatible API.
     $openaiConfig = pingEndpoint($openaiBaseUrl, '/extra/version');
     if (!isset($openaiConfig['error'])) {
          $selectedEndpoint = $openaiBaseUrl;
@@ -45,10 +45,10 @@ if (!isset($koboldConfig['error']) && isset($koboldConfig['result'])) {
     }
 }
 
-// Log selected endpoint for debugging
+// Log selected endpoint for debugging.
 file_put_contents('selected_endpoint.log', "Selected Endpoint: $selectedEndpoint ($endpointType)\n", FILE_APPEND);
 
-// Process user message
+// Process the user's message.
 $inputData = json_decode(file_get_contents('php://input'), true);
 $userMessage = isset($inputData['message']) ? trim($inputData['message']) : '';
 
@@ -57,11 +57,11 @@ if ($userMessage === '') {
     exit;
 }
 
-// Format the prompt as a chat log
+// Format the prompt as a chat log.
 $prompt = "[The following is an interesting chat message log between User and KoboldGPT.]\n\nUser: " 
           . $userMessage . "\nKoboldGPT:";
 
-// Build the payload; note the "mode" field forces chat behavior.
+// Build the payload.
 $payload = array(
     "n" => 1,
     "max_context_length" => 4096,
@@ -97,13 +97,13 @@ $payload = array(
     "mode" => "chat"
 );
 
-// Log the input payload for debugging (simulate terminal log)
+// Log the input payload for debugging.
 file_put_contents('kobo_processing.log', "Input Payload: " . json_encode($payload) . "\n", FILE_APPEND);
 
 // Construct the full generation URL.
 $generateUrl = $selectedEndpoint . $generateSuffix;
 
-// Initialize cURL for generation request.
+// Initialize cURL for the generation request.
 $ch = curl_init($generateUrl);
 curl_setopt_array($ch, array(
     CURLOPT_RETURNTRANSFER => true,
@@ -118,7 +118,7 @@ $response = curl_exec($ch);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log the raw API response
+// Log the raw API response.
 file_put_contents('api_response.log', "Raw API Response: " . $response . "\n", FILE_APPEND);
 
 if ($response === false || empty($response)) {
@@ -129,25 +129,20 @@ if ($response === false || empty($response)) {
 
 // Decode the API response.
 $result = json_decode($response, true);
-
-// Log the usage metrics if available.
-if (isset($result['usage'])) {
-    $usage = $result['usage'];
-    $promptTokens = isset($usage['prompt_tokens']) ? $usage['prompt_tokens'] : 'N/A';
-    $completionTokens = isset($usage['completion_tokens']) ? $usage['completion_tokens'] : 'N/A';
-    $totalTokens = isset($usage['total_tokens']) ? $usage['total_tokens'] : 'N/A';
-    $logLine = "Processing Prompt: $promptTokens tokens, Generating: $completionTokens tokens, Total: $totalTokens tokens\n";
-    file_put_contents('kobo_processing.log', $logLine, FILE_APPEND);
-}
+// Log the parsed result for inspection.
+file_put_contents('parsed_response.log', print_r($result, true) . "\n", FILE_APPEND);
 
 // Extract the generated text.
-if (isset($result['choices'][0]['text'])) {
+// First, try 'choices'[0]['text'], then 'response'.
+if (!empty($result['choices'][0]['text'])) {
     $aiReply = trim($result['choices'][0]['text']);
+} elseif (!empty($result['response'])) {
+    $aiReply = trim($result['response']);
 } else {
     $aiReply = "⚠️ No reply found from API.";
 }
 
-// Log the output.
+// Log the final output.
 file_put_contents('kobo_processing.log', "Output: " . $aiReply . "\n", FILE_APPEND);
 
 // Return the reply as JSON.
