@@ -89,4 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'daily_totals' => $daily_totals
     ];
 } else {
-    http_response_code(
+    http_response_code(405);
+    $response['success'] = false;
+    $response['message'] = 'Invalid request method.';
+}
+
+echo json_encode($response);
+?>
