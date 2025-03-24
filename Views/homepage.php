@@ -96,7 +96,7 @@
     <div class="container">
       <h1 class="display-4 fw-bold">Revolutionize Your Business with AI</h1>
       <p class="lead">Track expenses, optimize profits, and stay ahead — all in one powerful platform.</p>
-      <a href="#" class="btn btn-primary btn-lg mt-3">Get Started</a>
+      <a href="login.php" class="btn btn-primary btn-lg mt-3">Get Started</a>
     </div>
 
     <div class="wave-overlay">
