@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Define endpoints
-$koboldBaseUrl = 'https://linda-iraq-sig-suspended.trycloudflare.com/api';
-$openaiBaseUrl   = 'https://linda-iraq-sig-suspended.trycloudflare.com/v1';
+$koboldBaseUrl = 'https://municipality-pools-css-appraisal.trycloudflare.com/api';
+$openaiBaseUrl   = 'https://municipality-pools-css-appraisal.trycloudflare.com/v1';
 
 // Function to ping an endpoint (using /extra/version)
 function pingEndpoint($baseUrl, $suffix = '/extra/version') {
