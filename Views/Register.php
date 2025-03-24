@@ -95,6 +95,25 @@ if (isset($_SESSION['user_id'])) {
 
   <!-- Register Form -->
   <div class="register-wrapper">
+<?php if (isset($_GET['error'])): ?>
+  <div class="alert alert-danger text-center mt-2 mb-3">
+    <?php
+      switch ($_GET['error']) {
+        case 'nomatch':
+          echo "❌ Passwords do not match.";
+          break;
+        case 'emailtaken':
+          echo "⚠️ That email is already registered.";
+          break;
+        case 'weakpass':
+          echo "🔐 Password too weak. Use at least 8 characters, 1 uppercase, and 1 number.";
+          break;
+        default:
+          echo "⚠️ Unknown error occurred.";
+      }
+    ?>
+  </div>
+<?php endif; ?>
     <h2>Create Your Account</h2>
     <form method="POST" action="../backend/register_action.php">
       <div class="mb-3">
@@ -108,6 +127,11 @@ if (isset($_SESSION['user_id'])) {
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" name="password" required />
+                  <small id="passStrengthText" class="text-muted"></small>
+          <div class="progress mt-1">
+            <div class="progress-bar" id="passStrengthBar" style="width: 0%;"></div>
+          </div>
+
       </div>
       <div class="mb-3">
         <label for="confirm_password" class="form-label">Confirm Password</label>
