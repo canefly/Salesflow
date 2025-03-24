@@ -1,7 +1,7 @@
 <?php
 // get_sales.php
 header('Content-Type: application/json');
-require_once '../Database/config.php'; // DB connection
+require_once '../Database/connection.php'; // DB connection
 
 $response = [];
 
