@@ -65,3 +65,5 @@
 Prepared by: Cane 🐾  
 With full husky chaos, vision, and fire 😤🔥
 
+add notes
+we could have unique motivational notes in the dashboard limited by token of ai 
