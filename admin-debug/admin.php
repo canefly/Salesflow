@@ -37,6 +37,12 @@
     button:hover {
       background-color: #0056b3;
     }
+    input, select {
+      padding: 0.5rem;
+      margin: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
     .response-box {
       background: #f1f1f1;
       padding: 1rem;
@@ -61,53 +67,74 @@
 
   <div class="section">
     <h2>📦 Sales Testing</h2>
-    <button onclick="runTest('create_sale')">Create Sale</button>
-    <button onclick="runTest('get_sales')">Get All Sales</button>
-    <button onclick="runTest('group_sales')">Grouped Sales by Day</button>
-    <button onclick="runTest('delete_sale')">Delete Sale (ID=1)</button>
-  </div>
 
-  <div class="section">
-    <h2>📂 Category Management</h2>
-    <button onclick="runTest('create_category')">Create Category</button>
-    <button onclick="runTest('get_categories')">Get Categories</button>
-    <div class="placeholder">📌 Subcategory (Level 1) UI Placeholder – Coming Soon!</div>
-  </div>
+    <div>
+      <h4>Create Sale</h4>
+      <input type="text" id="sale_product" placeholder="Product Name" />
+      <input type="number" id="sale_amount" placeholder="Total Amount" />
+      <input type="number" id="sale_quantity" placeholder="Quantity" value="1" />
+      <input type="number" id="sale_category" placeholder="Category ID" />
+      <button onclick="createSale()">➕ Create Sale</button>
+    </div>
 
-  <div class="section">
-    <h2>⭐ Shortcut System</h2>
-    <button onclick="runTest('create_shortcut')">Create Shortcut</button>
-    <button onclick="runTest('get_shortcuts')">Get Shortcuts</button>
-  </div>
+    <div>
+      <h4>Get Sales (Flat)</h4>
+      <button onclick="getSales()">📄 Fetch All Sales</button>
+    </div>
 
-  <div class="section">
-    <h2>📊 Dashboard Data</h2>
-    <button onclick="runTest('get_summary')">Get Summary (Totals + Graph)</button>
-  </div>
-
-  <div class="section">
-    <h2>🤖 AI Handler Simulator</h2>
-    <button onclick="runTest('ai_home')">Home AI Insight</button>
-    <button onclick="runTest('ai_motivation')">Motivational AI Prompt</button>
-    <button onclick="runTest('ai_chat')">Chat AI Simulation</button>
-    <div class="placeholder">🧠 Dynamic API Key / Persona Manager Integration – Soon!</div>
+    <div>
+      <h4>Delete Sale</h4>
+      <input type="number" id="delete_sale_id" placeholder="Sale ID" />
+      <button onclick="deleteSale()">🗑️ Delete Sale</button>
+    </div>
   </div>
 
   <div class="response-box" id="result">Awaiting test run...</div>
 
   <script>
-    function runTest(type) {
-      const result = document.getElementById('result');
-      result.textContent = '⏳ Running ' + type + '...';
+    const user_id = 1; // change this if needed for testing
 
-      // Simulated testing map (you'll replace with real fetch calls)
-      setTimeout(() => {
-        result.textContent = JSON.stringify({
-          test: type,
-          status: 'success',
-          message: `This is a simulated response for "${type}".`
-        }, null, 2);
-      }, 700);
+    function createSale() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('product_name', document.getElementById('sale_product').value);
+      data.append('total_amount', document.getElementById('sale_amount').value);
+      data.append('quantity', document.getElementById('sale_quantity').value);
+      data.append('category_id', document.getElementById('sale_category').value);
+      data.append('sale_date', new Date().toISOString().slice(0, 19).replace('T', ' '));
+      data.append('notes', 'admin test sale');
+
+      fetch('../Backend/create_sale.php', {
+        method: 'POST',
+        body: data
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        });
+    }
+
+    function getSales() {
+      fetch(`../Backend/get_sales.php?user_id=${user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        });
+    }
+
+    function deleteSale() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('sale_id', document.getElementById('delete_sale_id').value);
+
+      fetch('../Backend/delete_sale.php', {
+        method: 'POST',
+        body: data
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        });
     }
   </script>
 </body>
