@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+  header("Location: dashboard.php");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +16,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-  <!-- Main stylesheet from homepage -->
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="../public/css/styles.css" />
 
   <style>
-    /* Mesh Gradient from homepage */
     body.login-page {
       min-height: 100vh;
       background:
@@ -31,7 +37,6 @@
       font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Login box styling */
     .login-wrapper {
       background: #fff;
       color: #000;
@@ -67,7 +72,6 @@
     .text-link:hover {
       text-decoration: underline;
     }
-
   </style>
 </head>
 <body class="login-page">
@@ -89,11 +93,10 @@
     </div>
   </nav>
 
-
   <!-- Login Box -->
   <div class="login-wrapper">
     <h2>Log In to Continue</h2>
-    <form method="POST" action="../backend/login.php">
+    <form method="POST" action="../backend/login_action.php">
       <div class="mb-3">
         <label for="email" class="form-label">Email Address</label>
         <input type="email" class="form-control" id="email" name="email" required />
@@ -115,7 +118,7 @@
       <i class="fab fa-google"></i> Login with Google
     </a>
 
-    <a href="register.html" class="text-link">New here? Create an account</a>
+    <a href="register.php" class="text-link">New here? Create an account</a>
   </div>
 
   <script>
