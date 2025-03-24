@@ -1,0 +1,67 @@
+**Salesflow Dashboard & Finalization Draft Plan**
+
+---
+
+### ✅ CURRENTLY FUNCTIONAL:
+- [x] User login and registration with hashed passwords
+- [x] Sessions maintained across pages
+- [x] Logout button using secure POST form
+- [x] Dashboard with proper greeting and welcome message
+- [x] Chart.js working with fake/dummy data for visual appeal
+- [x] Professional collapsible sidebar using Bootstrap and JS
+- [x] Chatbox panel styled like a Messenger UI, toggleable
+- [x] Consistent design with homepage, login, register pages
+
+---
+
+### 📌 DASHBOARD TO-DO / PLANNED ADDITIONS:
+
+#### 1. ✨ Product Buttons (Quick Add)
+- [ ] Add product shortcuts under graphs for fast entry (for fixed menus)
+- [ ] Dynamic rendering of quick buttons based on database category
+
+#### 2. 📈 Dynamic Data Integration
+- [ ] Pull total income and trending product from DB (`sales` table)
+- [ ] Integrate chart data to update based on user transactions
+
+#### 3. 📁 Module Linking
+- [ ] Link sidebar nav to Income, Trends, Reports, Settings pages
+- [ ] Dummy pages for now (or create placeholders)
+
+#### 4. 🧠 Seraphina AI
+- [ ] Chat log saving in `ai_logs` table
+- [ ] Ability to answer based on user product/sales records
+- [ ] Time-based queries support ("what sold most last week?")
+
+#### 5. 🌙 User Personalization
+- [ ] Theme switcher (dark/light)
+- [ ] User settings (from `user_settings` table)
+- [ ] Show profile picture on sidebar (optional)
+
+#### 6. 📤 Export Options
+- [ ] Export analytics to Excel/CSV
+- [ ] Import products from CSV
+
+---
+
+### 📋 MISCELLANEOUS:
+- [ ] Hide chatbox by default and only show on user toggle
+- [ ] Compress assets before demo (performance boost)
+- [ ] Disable dev error output on live (remove `display_errors`)
+- [ ] Optional mobile support with responsive layout
+
+---
+
+### 🎯 DEMO FLOW SUGGESTED:
+1. Show login/register functionality
+2. Show sidebar collapsing + navigating
+3. Highlight total income/trending
+4. Show Seraphina answering a basic prompt
+5. Mention AI + future export/import capabilities
+6. Logout and return to public login screen
+
+---
+
+Prepared by: Cane 🐾  
+With full husky chaos, vision, and fire 😤🔥
+
