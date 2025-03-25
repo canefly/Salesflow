@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($delete->execute()) {
         echo json_encode([
             'success' => true,
-            'message' => \"Sale ID $sale_id moved to recycle bin."\
+            'message' => "Sale ID $sale_id moved to recycle bin."
         ]);
     } else {
         http_response_code(500);
