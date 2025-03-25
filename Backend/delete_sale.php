@@ -32,18 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Insert into recycle_bin
-    $insert = $conn->prepare("INSERT INTO recycle_bin (user_id, table_name, record_id) VALUES (?, 'sales', ?)");
-    $insert->bind_param("ii", $user_id, $sale_id);
+        // Fetch full sale data first
+    $getSale = $conn->prepare("SELECT * FROM sales WHERE id = ? AND user_id = ?");
+    $getSale->bind_param("ii", $sale_id, $user_id);
+    $getSale->execute();
+    $result = $getSale->get_result();
+    $sale_data = $result->fetch_assoc();
+    $backup_json = json_encode($sale_data);
 
-    if (!$insert->execute()) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Failed to move record to recycle bin.'
-        ]);
-        exit;
-    }
+    // Insert into recycle bin with full backup
+    $insert = $conn->prepare("INSERT INTO recycle_bin (user_id, table_name, record_id, backup_data) VALUES (?, 'sales', ?, ?)");
+    $insert->bind_param("iis", $user_id, $sale_id, $backup_json);
 
     // Delete from sales
     $delete = $conn->prepare("DELETE FROM sales WHERE id = ? AND user_id = ?");
