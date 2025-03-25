@@ -66,22 +66,36 @@
   <h1>🛠️ Developer Console - SalesFlow</h1>
 
   <div class="section">
-    <h2>📦 Sales Testing</h2>
+    <h2>📂 Category Management</h2>
+    <div>
+      <h4>Create Category</h4>
+      <input type="text" id="cat_name" placeholder="Category Name" />
+      <input type="number" id="cat_parent_id" placeholder="Parent ID (optional)" />
+      <button onclick="createCategory()">➕ Create Category</button>
+    </div>
+    <div>
+      <h4>Get Categories</h4>
+      <button onclick="getCategories()">📄 Fetch Categories</button>
+      <div id="categoryList"></div>
+    </div>
+  </div>
 
+  <div class="section">
+    <h2>📦 Sales Testing</h2>
     <div>
       <h4>Create Sale</h4>
       <input type="text" id="sale_product" placeholder="Product Name" />
       <input type="number" id="sale_amount" placeholder="Total Amount" />
       <input type="number" id="sale_quantity" placeholder="Quantity" value="1" />
-      <input type="number" id="sale_category" placeholder="Category ID" />
+      <select id="sale_category">
+        <option value="">-- Select Category --</option>
+      </select>
       <button onclick="createSale()">➕ Create Sale</button>
     </div>
-
     <div>
       <h4>Get Sales (Flat)</h4>
       <button onclick="getSales()">📄 Fetch All Sales</button>
     </div>
-
     <div>
       <h4>Delete Sale</h4>
       <input type="number" id="delete_sale_id" placeholder="Sale ID" />
@@ -92,7 +106,38 @@
   <div class="response-box" id="result">Awaiting test run...</div>
 
   <script>
-    const user_id = 1; // change this if needed for testing
+    const user_id = 1; // Adjust this if needed
+
+    function createCategory() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('category_name', document.getElementById('cat_name').value);
+      const parentId = document.getElementById('cat_parent_id').value;
+      if (parentId) data.append('parent_id', parentId);
+
+      fetch('../Backend/create_category.php', {
+        method: 'POST',
+        body: data
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+          getCategories();
+        });
+    }
+
+    function getCategories() {
+      fetch(`../Backend/get_categories.php?user_id=${user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById('categoryList');
+          const select = document.getElementById('sale_category');
+
+          list.innerHTML = '<ul>' + data.categories.map(c => `<li>ID: ${c.id} - ${c.category_name}</li>`).join('') + '</ul>';
+          select.innerHTML = '<option value="">-- Select Category --</option>' +
+            data.categories.map(c => `<option value="${c.id}">${c.category_name}</option>`).join('');
+        });
+    }
 
     function createSale() {
       const data = new URLSearchParams();
@@ -136,6 +181,9 @@
           document.getElementById('result').textContent = JSON.stringify(data, null, 2);
         });
     }
+
+    // Load categories on page load for dropdown
+    window.onload = getCategories;
   </script>
 </body>
 </html>
