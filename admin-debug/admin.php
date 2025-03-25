@@ -52,13 +52,18 @@
       white-space: pre-wrap;
       overflow: auto;
     }
-    .placeholder {
-      background-color: #fff3cd;
-      border: 1px dashed #ffc107;
-      padding: 1rem;
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 1rem;
-      border-radius: 5px;
-      color: #856404;
+    }
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
     }
   </style>
 </head>
@@ -67,46 +72,39 @@
 
   <div class="section">
     <h2>📂 Category Management</h2>
-    <div>
-      <h4>Create Category</h4>
-      <input type="text" id="cat_name" placeholder="Category Name" />
-      <input type="number" id="cat_parent_id" placeholder="Parent ID (optional)" />
-      <button onclick="createCategory()">➕ Create Category</button>
-    </div>
-    <div>
-      <h4>Get Categories</h4>
-      <button onclick="getCategories()">📄 Fetch Categories</button>
-      <div id="categoryList"></div>
-    </div>
+    <input type="text" id="cat_name" placeholder="Category Name" />
+    <input type="number" id="cat_parent_id" placeholder="Parent ID (optional)" />
+    <button onclick="createCategory()">➕ Create Category</button>
+    <button onclick="getCategories()">📄 Fetch Categories</button>
+    <div id="categoryList"></div>
   </div>
 
   <div class="section">
     <h2>📦 Sales Testing</h2>
-    <div>
-      <h4>Create Sale</h4>
-      <input type="text" id="sale_product" placeholder="Product Name" />
-      <input type="number" id="sale_amount" placeholder="Total Amount" />
-      <input type="number" id="sale_quantity" placeholder="Quantity" value="1" />
-      <select id="sale_category">
-        <option value="">-- Select Category --</option>
-      </select>
-      <button onclick="createSale()">➕ Create Sale</button>
-    </div>
-    <div>
-      <h4>Get Sales (Flat)</h4>
-      <button onclick="getSales()">📄 Fetch All Sales</button>
-    </div>
-    <div>
-      <h4>Delete Sale</h4>
-      <input type="number" id="delete_sale_id" placeholder="Sale ID" />
-      <button onclick="deleteSale()">🗑️ Delete Sale</button>
-    </div>
+    <input type="text" id="sale_product" placeholder="Product Name" />
+    <input type="number" id="sale_amount" placeholder="Total Amount" />
+    <input type="number" id="sale_quantity" placeholder="Quantity" value="1" />
+    <select id="sale_category">
+      <option value="">-- Select Category --</option>
+    </select>
+    <button onclick="createSale()">➕ Create Sale</button>
+    <button onclick="getSales()">📄 Fetch All Sales</button>
+    <input type="number" id="delete_sale_id" placeholder="Sale ID" />
+    <button onclick="deleteSale()">🗑️ Delete Sale</button>
+    <div id="salesTable"></div>
+  </div>
+
+  <div class="section">
+    <h2>🗑️ Recycle Bin</h2>
+    <button onclick="getRecycleBin()">♻️ Load Recycle Bin</button>
+    <button onclick="purgeRecycleBin()">🔥 Purge All</button>
+    <div id="recycleBinTable"></div>
   </div>
 
   <div class="response-box" id="result">Awaiting test run...</div>
 
   <script>
-    const user_id = 1; // Adjust this if needed
+    const user_id = 1;
 
     function createCategory() {
       const data = new URLSearchParams();
@@ -130,12 +128,11 @@
       fetch(`../Backend/get_categories.php?user_id=${user_id}`)
         .then(res => res.json())
         .then(data => {
-          const list = document.getElementById('categoryList');
           const select = document.getElementById('sale_category');
-
-          list.innerHTML = '<ul>' + data.categories.map(c => `<li>ID: ${c.id} - ${c.category_name}</li>`).join('') + '</ul>';
+          const list = document.getElementById('categoryList');
           select.innerHTML = '<option value="">-- Select Category --</option>' +
             data.categories.map(c => `<option value="${c.id}">${c.category_name}</option>`).join('');
+          list.innerHTML = '<ul>' + data.categories.map(c => `<li>ID: ${c.id} - ${c.category_name}</li>`).join('') + '</ul>';
         });
     }
 
@@ -156,6 +153,7 @@
         .then(res => res.json())
         .then(data => {
           document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+          getSales();
         });
     }
 
@@ -163,7 +161,21 @@
       fetch(`../Backend/get_sales.php?user_id=${user_id}`)
         .then(res => res.json())
         .then(data => {
-          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+          const table = data.sales.map(sale => `
+            <tr>
+              <td>${sale.id}</td>
+              <td>${sale.product_name}</td>
+              <td>${sale.total_amount}</td>
+              <td>${sale.quantity}</td>
+              <td>${sale.category_id}</td>
+              <td>${sale.sale_date}</td>
+            </tr>`).join('');
+
+          document.getElementById('salesTable').innerHTML = `
+            <table>
+              <thead><tr><th>ID</th><th>Product</th><th>Amount</th><th>Qty</th><th>Cat ID</th><th>Date</th></tr></thead>
+              <tbody>${table}</tbody>
+            </table>`;
         });
     }
 
@@ -179,11 +191,88 @@
         .then(res => res.json())
         .then(data => {
           document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+          getSales();
+          getRecycleBin();
         });
     }
 
-    // Load categories on page load for dropdown
-    window.onload = getCategories;
+    function getRecycleBin() {
+      fetch(`../Backend/get_recycle_bin.php?user_id=${user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          const table = data.entries.map(entry => `
+            <tr>
+              <td>${entry.id}</td>
+              <td>${entry.table_name}</td>
+              <td>${entry.record_id}</td>
+              <td>${entry.deleted_at}</td>
+              <td>
+                <button onclick="restoreBin(${entry.id})">🔄 Restore</button>
+                <button onclick="deleteBin(${entry.id})">❌ Delete</button>
+              </td>
+            </tr>`).join('');
+
+          document.getElementById('recycleBinTable').innerHTML = `
+            <table>
+              <thead><tr><th>ID</th><th>Table</th><th>Record ID</th><th>Deleted At</th><th>Actions</th></tr></thead>
+              <tbody>${table}</tbody>
+            </table>`;
+        });
+    }
+
+    function deleteBin(recycle_id) {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('recycle_id', recycle_id);
+
+      fetch('../Backend/recycle_delete.php', {
+        method: 'POST',
+        body: data
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        getRecycleBin();
+      });
+    }
+
+    function purgeRecycleBin() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+
+      fetch('../Backend/recycle_purge.php', {
+        method: 'POST',
+        body: data
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        getRecycleBin();
+      });
+    }
+
+    function restoreBin(recycle_id) {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('recycle_id', recycle_id);
+
+      fetch('../Backend/recycle_restore.php', {
+        method: 'POST',
+        body: data
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        getRecycleBin();
+        getSales();
+      });
+    }
+
+    window.onload = function() {
+      getCategories();
+      getSales();
+      getRecycleBin();
+    }
   </script>
 </body>
 </html>
