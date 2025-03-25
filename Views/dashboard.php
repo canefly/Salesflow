@@ -1,200 +1,206 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+session_start();
 if (!isset($_SESSION['user_id'])) {
   header("Location: login.php");
   exit;
 }
-$username = $_SESSION['username'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salesflow Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to your Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../public/css/styles.css" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #001f4d, #004080);
+      background-color: #f8f9fa;
+    }
+    .nav-header {
+      background-color: #343a40;
       color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .sidebar {
-      width: 250px;
-      background-color: #001f4d;
-      position: fixed;
-      top: 0; left: 0;
-      height: 100vh;
-      padding-top: 1rem;
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-    .sidebar.collapsed {
-      width: 70px;
-    }
-    .sidebar a {
-      color: white;
-      padding: 12px 20px;
-      display: block;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .sidebar a:hover {
-      background-color: #003366;
-    }
-    .toggle-btn {
-      position: fixed;
-      top: 15px;
-      left: 260px;
-      background-color: #004080;
-      border: none;
-      color: white;
-      z-index: 1100;
-    }
-    .main {
-      margin-left: 250px;
-      padding: 2rem;
-      transition: margin-left 0.3s ease;
-    }
-    .collapsed + .main {
-      margin-left: 70px;
-    }
-    .card-custom {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      color: white;
-    }
-    canvas {
-      background: white;
-      border-radius: 10px;
-      padding: 10px;
+    .section {
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar" id="sidebar">
-    <h4 class="text-center text-white">Salesflow</h4>
-    <a href="#">🏠 Dashboard</a>
-    <a href="#">📦 Product Trends</a>
-    <a href="#">📊 Reports</a>
-    <a href="#">⚙️ Settings</a>
-    <form action="../backend/logout.php" method="POST" class="text-center mt-5">
-      <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-    </form>
+  <script src="../public/js/main.js"></script>
+  <div class="nav-header">
+    <h4 class="mb-0">SalesFlow</h4>
+    <a href="../Backend/logout.php" class="btn btn-outline-light">Logout</a>
   </div>
 
-  <button class="btn toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+    <!-- Floating Chat Button -->
+  <button
+    id="ai-chat-button"
+    class="btn btn-primary rounded-circle chat-toggle-btn position-fixed"
+    style="bottom: 30px; right: 30px; z-index: 999; width: 60px; height: 60px;"
+  >
+    <i class="fas fa-comment-dots"></i>
+  </button>
 
-  <div class="main">
-    <div class="container-fluid">
-      <div class="text-white mb-4">
-        <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
-        <p>This is your dashboard. Here you can view insights, trends, and manage your salesflow.</p>
-      </div>
+  <!-- Messenger-Style Chat Panel -->
+  <!-- 
+       This 'aside' element represents a complementary UI panel.
+       The .chat-panel class will handle positioning & transitions (in CSS).
+       hidden attribute: we'll toggle this with JS to show/hide.
+  -->
+    <!-- Remove hidden here. Just rely on CSS. -->
+    <aside
+    id="ai-chat-panel"
+    class="chat-panel position-fixed shadow"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="chat-panel-title"
+    >
 
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="card-custom">
-            <h4>Total Income</h4>
-            <p>₱7,500.00</p>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card-custom">
-            <h4>Trending Product</h4>
-            <p>Wireless Headphones</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-md-6">
-          <canvas id="incomeChart"></canvas>
-        </div>
-        <div class="col-md-6">
-          <canvas id="productChart"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Chat Assistant -->
-  <aside id="ai-chat-panel" class="chat-panel position-fixed shadow bg-light" style="bottom: 0; right: 20px; width: 320px; max-height: 500px; border-radius: 10px 10px 0 0; display: none;" role="dialog" aria-modal="true" aria-labelledby="chat-panel-title">
+    <!-- Panel Header -->
     <header class="chat-header d-flex align-items-center justify-content-between bg-primary text-white px-3 py-2">
       <h5 class="mb-0" id="chat-panel-title">Salesflow AI Assistant</h5>
       <button class="btn-close btn-close-white" id="chat-close-btn" aria-label="Close chat"></button>
     </header>
-    <div class="chat-body bg-white p-2" id="chat-messages"></div>
+
+    <!-- Chat Messages Container -->
+    <div class="chat-body bg-white p-2" id="chat-messages">
+      <!-- Chat bubbles inserted by JS -->
+    </div>
+
+    <!-- Chat Footer: Input & Send -->
     <footer class="chat-footer p-2 bg-light">
       <div class="input-group">
-        <textarea class="form-control" rows="1" id="chat-input" placeholder="Ask something..."></textarea>
+        <textarea
+          class="form-control"
+          rows="1"
+          id="chat-input"
+          placeholder="Ask something..."
+        ></textarea>
         <button class="btn btn-primary" id="chat-send-btn">Send</button>
       </div>
     </footer>
   </aside>
-  <button id="ai-chat-button" class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow"><i class="fas fa-comment-dots"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="container py-4">
+    <h2 class="mb-4">📂 Category Management</h2>
+    <div class="card p-3 section">
+      <input type="text" id="cat_name" placeholder="Category Name" class="form-control mb-2">
+      <input type="number" id="cat_parent_id" placeholder="Parent ID (optional)" class="form-control mb-2">
+      <button onclick="createCategory()" class="btn btn-primary">➕ Create Category</button>
+      <div id="categoryList" class="mt-3"></div>
+    </div>
+
+    <h2 class="mb-4">💸 Create Sale</h2>
+    <div class="card p-3 section">
+      <input type="text" id="sale_product" placeholder="Product Name" class="form-control mb-2">
+      <input type="number" id="sale_amount" placeholder="Total Amount" class="form-control mb-2">
+      <input type="number" id="sale_quantity" value="1" placeholder="Quantity" class="form-control mb-2">
+      <select id="sale_category" class="form-select mb-2">
+        <option value="">-- Select Category --</option>
+      </select>
+      <button onclick="createSale()" class="btn btn-success">➕ Create Sale</button>
+    </div>
+
+    <h2 class="mb-4">📊 Sales Table</h2>
+    <div id="salesTable" class="table-responsive section"></div>
+
+    <div class="card border-warning section">
+      <div class="card-body">
+        <h5 class="card-title text-warning">🗑️ Recycle Bin (Under Development)</h5>
+        <p class="card-text">This section is still under development. Features like restore and purge will be available soon.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
-    document.getElementById("toggleSidebar").addEventListener("click", function () {
-      const sidebar = document.getElementById("sidebar");
-      sidebar.classList.toggle("collapsed");
-      document.querySelector(".main").classList.toggle("collapsed");
-    });
+    const user_id = <?php echo $_SESSION['user_id']; ?>;
+    let categories = [];
 
-    const incomeChart = new Chart(document.getElementById("incomeChart"), {
-      type: 'pie',
-      data: {
-        labels: ['Wireless Headphones', 'Smartwatches', 'Gaming Mouse', 'Mechanical Keyboards'],
-        datasets: [{
-          data: [4000, 2000, 1000, 500],
-          backgroundColor: ['#66ff66', '#4d94ff', '#ff9900', '#cccccc']
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            labels: {
-              color: 'white'
-            }
-          }
-        }
-      }
-    });
+    function createCategory() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('category_name', document.getElementById('cat_name').value);
+      const parentId = document.getElementById('cat_parent_id').value;
+      if (parentId) data.append('parent_id', parentId);
 
-    const productChart = new Chart(document.getElementById("productChart"), {
-      type: 'bar',
-      data: {
-        labels: ['Wireless Headphones', 'Smartwatches', 'Gaming Mouse', 'Mechanical Keyboards'],
-        datasets: [{
-          label: 'Sales',
-          data: [120, 90, 75, 60],
-          backgroundColor: ['#66ff66', '#4d94ff', '#ff9900', '#ff4d4d']
-        }]
-      },
-      options: {
-        scales: {
-          x: { ticks: { color: 'white' } },
-          y: { ticks: { color: 'white' } }
-        }
-      }
-    });
+      fetch('../Backend/create_category.php', { method: 'POST', body: data })
+        .then(res => res.json())
+        .then(data => {
+          getCategories();
+        });
+    }
 
-    // Chat toggle
-    const chatPanel = document.getElementById("ai-chat-panel");
-    document.getElementById("ai-chat-button").addEventListener("click", () => {
-      chatPanel.style.display = 'flex';
-    });
-    document.getElementById("chat-close-btn").addEventListener("click", () => {
-      chatPanel.style.display = 'none';
-    });
+    function getCategories() {
+      fetch(`../Backend/get_categories.php?user_id=${user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          categories = data.categories;
+          const select = document.getElementById('sale_category');
+          const list = document.getElementById('categoryList');
+          select.innerHTML = '<option value="">-- Select Category --</option>' +
+            categories.map(c => `<option value="${c.id}">${c.category_name}</option>`).join('');
+          list.innerHTML = '<ul>' + categories.map(c => `<li>ID: ${c.id} - ${c.category_name}</li>`).join('') + '</ul>';
+        });
+    }
+
+    function getCategoryNameById(id) {
+      const cat = categories.find(c => c.id == id);
+      return cat ? `${cat.category_name} (ID: ${id})` : `ID: ${id}`;
+    }
+
+    function createSale() {
+      const data = new URLSearchParams();
+      data.append('user_id', user_id);
+      data.append('product_name', document.getElementById('sale_product').value);
+      data.append('total_amount', document.getElementById('sale_amount').value);
+      data.append('quantity', document.getElementById('sale_quantity').value);
+      data.append('category_id', document.getElementById('sale_category').value);
+      const now = new Date();
+      const offset = now.getTimezoneOffset() * 60000; // Convert to ms
+      const localISO = new Date(now.getTime() - offset).toISOString().slice(0, 19).replace('T', ' ');
+      data.append('sale_date', localISO);
+
+      data.append('notes', 'dashboard sale');
+
+      fetch('../Backend/create_sale.php', { method: 'POST', body: data })
+        .then(res => res.json())
+        .then(data => {
+          getSales();
+        });
+    }
+
+    function getSales() {
+      fetch(`../Backend/get_sales.php?user_id=${user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          const rows = data.sales.map(sale => `
+            <tr>
+              <td>${sale.id}</td>
+              <td>${sale.product_name}</td>
+              <td>${sale.total_amount}</td>
+              <td>${sale.quantity}</td>
+              <td>${getCategoryNameById(sale.category_id)}</td>
+              <td>${sale.sale_date}</td>
+            </tr>`).join('');
+          document.getElementById('salesTable').innerHTML = `
+            <table class="table table-bordered">
+              <thead><tr><th>ID</th><th>Product</th><th>Amount</th><th>Qty</th><th>Category</th><th>Date</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>`;
+        });
+    }
+
+    window.onload = function () {
+      getCategories();
+      getSales();
+    };
   </script>
 </body>
 </html>
