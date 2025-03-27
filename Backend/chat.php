@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 
 // === CONFIGURATION ===
 $useKobold = true;
-$koboldUrl = 'https://scott-signatures-originally-wireless.trycloudflare.com/api';
+$koboldUrl = 'https://ai.canefly.xyz/api';
 $openaiUrl = 'http://localhost:3000/v1'; // fallback, not used if $useKobold = true
 
 // === DETERMINE ENDPOINT ===
