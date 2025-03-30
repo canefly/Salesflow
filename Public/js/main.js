@@ -26,8 +26,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   });
 
-  // ========== 7. OPTIONAL EXTRAS ==========
-  // - Animate chat button
-  // - Detect user pressing 'Enter' in chat input
-  // - Replace getFakeAIResponse with real backend calls
 });

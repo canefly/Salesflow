@@ -106,7 +106,7 @@
       padding: 20px;
     }
 
-    .main-content.expanded {
+    .sidebar.collapsed ~ .main-content {
       margin-left: 70px;
     }
 
