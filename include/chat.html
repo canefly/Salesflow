@@ -1,0 +1,310 @@
+<!-- 
+     Revamped Chat UI - Visual Improvements Only
+     (Retains connection to chat.php and backend logic)
+-->
+
+<!-- Floating Chat Button -->
+<button
+  id="ai-chat-button"
+  class="btn btn-primary rounded-circle chat-toggle-btn position-fixed"
+  style="bottom: 30px; right: 30px; z-index: 9999; width: 60px; height: 60px;"
+>
+  <i class="fas fa-comments"></i>
+</button>
+
+<!-- Chat Panel -->
+<aside
+  id="ai-chat-panel"
+  class="chat-panel position-fixed shadow"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="chat-panel-title"
+>
+  <!-- Chat Header -->
+  <header class="chat-header d-flex align-items-center justify-content-between px-4 py-3">
+    <h4 class="mb-0 fw-bold text-white" id="chat-panel-title">SalesFlow AI</h4>
+    <button class="btn-close btn-close-white" id="chat-close-btn" aria-label="Close chat"></button>
+  </header>
+
+  <!-- Chat Messages Body -->
+  <div class="chat-body" id="chat-messages"></div>
+
+  <!-- Quick Messages (Optional) -->
+  <div class="quick-messages d-flex flex-wrap bg-light px-3 py-2">
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="Hi there!">
+      Hi there!
+    </button>
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="Can you help me?">
+      Can you help me?
+    </button>
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="I have a question...">
+      I have a question...
+    </button>
+    <!-- Add more quick messages as needed -->
+  </div>
+
+  <!-- Chat Footer -->
+  <footer class="chat-footer bg-light p-3">
+    <div class="input-group">
+      <textarea
+        class="form-control rounded-pill"
+        rows="1"
+        id="chat-input"
+        placeholder="Type a message..."
+        style="resize: none;"
+      ></textarea>
+      <button class="btn btn-primary rounded-circle" id="chat-send-btn" style="width: 45px; height: 45px;">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </footer>
+</aside>
+
+<!-- STYLES -->
+<style>
+  /* Basic resets */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Chat Toggle Button */
+  .chat-toggle-btn {
+    box-shadow: 0 0 12px rgba(13, 110, 253, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .chat-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(13, 110, 253, 0.6);
+  }
+
+  /* Chat Panel */
+  .chat-panel {
+    right: 30px;
+    bottom: 40px;
+    width: 360px;
+    max-width: 90%;
+    max-height: 75vh;
+    background-color: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(20px);
+    z-index: 9999;
+  }
+  .chat-panel.show-panel {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Chat Header */
+  .chat-header {
+    background: #0d6efd;
+    color: #fff;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+  }
+
+  /* Chat Body */
+  .chat-body {
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fafafa;
+  }
+
+  /* Chat Bubbles (Rounded Rectangle for multi-line) */
+  .chat-bubble {
+    margin: 6px 0;
+    padding: 10px 14px;
+    border-radius: 20px; /* Moderate radius for rounded rectangle */
+    max-width: 75%;
+    line-height: 1.4;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .chat-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chat-bubble.user {
+    background-color: #0d6efd;
+    color: #fff;
+    margin-left: auto;
+    margin-right: 5px;
+  }
+  .chat-bubble.ai {
+    background-color: #ebebeb;
+    color: #000;
+    margin-left: 5px;
+  }
+
+  /* Typing Indicator */
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  .typing-indicator span {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin: 0 1px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+  }
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Quick Messages */
+  .quick-messages {
+    border-top: 1px solid #ddd;
+  }
+  .quick-msg-btn {
+    font-size: 0.85rem;
+  }
+
+  /* Chat Footer */
+  .chat-footer {
+    border-top: 1px solid #ddd;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chatButton    = document.getElementById('ai-chat-button');
+    const chatPanel     = document.getElementById('ai-chat-panel');
+    const closeBtn      = document.getElementById('chat-close-btn');
+    const sendBtn       = document.getElementById('chat-send-btn');
+    const chatInput     = document.getElementById('chat-input');
+    const chatMessages  = document.getElementById('chat-messages');
+    const quickMsgCont  = document.querySelector('.quick-messages');
+    const quickMsgBtns  = document.querySelectorAll('.quick-msg-btn');
+
+    // Toggle chat panel
+    chatButton.addEventListener('click', () => {
+      chatPanel.classList.toggle('show-panel');
+    });
+
+    // Close chat panel
+    closeBtn.addEventListener('click', () => {
+      chatPanel.classList.remove('show-panel');
+    });
+
+    // Send on Enter (Shift+Enter for newline)
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Send on button click
+    sendBtn.addEventListener('click', () => {
+      sendMessage();
+    });
+
+    // Quick message buttons auto-send when clicked
+    quickMsgBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        chatInput.value = btn.getAttribute('data-msg') || '';
+        sendMessage();
+      });
+    });
+
+    // Main send message function
+    function sendMessage() {
+      const userMessage = chatInput.value.trim();
+      if (!userMessage) return;
+
+      // Hide quick messages immediately on the first user message
+      if (quickMsgCont && quickMsgCont.style.display !== 'none') {
+        quickMsgCont.style.display = 'none';
+      }
+
+      // Create user bubble
+      createChatBubble(userMessage, 'user');
+      chatInput.value = '';
+
+      // Create a typing indicator bubble for AI
+      const typingBubble = createTypingBubble();
+
+      // Call your existing PHP endpoint
+      fetch('chat.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(res => res.json())
+      .then(data => {
+        typingBubble.textContent = data.reply;
+        typingBubble.classList.add('show');
+      })
+      .catch(() => {
+        typingBubble.textContent = "⚠️ Error: Unable to reach AI server.";
+        typingBubble.classList.add('show');
+      });
+    }
+
+    // Create a chat bubble (with fade-in)
+    function createChatBubble(message, sender = 'user') {
+      const bubble = document.createElement('div');
+      bubble.classList.add('chat-bubble', sender);
+      bubble.textContent = message;
+      chatMessages.appendChild(bubble);
+
+      // Trigger fade-in
+      setTimeout(() => bubble.classList.add('show'), 10);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return bubble;
+    }
+
+    // Create an AI typing indicator bubble
+    function createTypingBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('chat-bubble', 'ai');
+      const indicator = document.createElement('div');
+      indicator.classList.add('typing-indicator');
+      indicator.innerHTML = '<span></span><span></span><span></span>';
+      bubble.appendChild(indicator);
+      chatMessages.appendChild(bubble);
+
+      // Trigger fade-in
+      setTimeout(() => bubble.classList.add('show'), 10);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return bubble;
+    }
+
+    // (Optional) AI greeting on load
+    createChatBubble("Hi there! How can I help you today?", "ai");
+  });
+</script>
+
+
+<!-- REQUIRED: Keep your existing references to Bootstrap & Font Awesome -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
