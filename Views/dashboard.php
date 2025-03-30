@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
   header("Location: login.php");
@@ -33,6 +34,7 @@ if (!isset($_SESSION['user_id'])) {
   </style>
 </head>
 <body>
+  <?php include '../include/sidenav.php'; ?>
   <script src="../public/js/main.js"></script>
   <div class="nav-header">
     <h4 class="mb-0">SalesFlow</h4>

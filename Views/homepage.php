@@ -1,4 +1,6 @@
 <?php session_start(); ?>
+<?php include '../include/chat.html'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -119,30 +119,6 @@ footer {
     background-color: #1c1c1c;
     color: #eee;
 }
-
-/* =====================================================
-   ✅ Responsive Tweaks (Mobile First)
-===================================================== */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-
-    .hero p {
-        font-size: 1.1rem;
-    }
-
-    .btn-lg {
-        width: 100%;
-    }
-
-    .chat-panel {
-        right: 10px;
-        width: 90%;
-        max-height: 60%;
-    }
-}
-
 /* =====================================================
    ✅ Utility Classes (Reusable)
 ===================================================== */
