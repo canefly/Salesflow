@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
 <!-- 
      Revamped Chat UI - Visual Improvements Only
      (Retains connection to chat.php and backend logic)
@@ -15,7 +18,7 @@
 <!-- Chat Panel -->
 <aside
   id="ai-chat-panel"
-  class="chat-panel position-fixed shadow"
+  class="chat-panel position-fixed shadow show-panel d-flex flex-column"
   role="dialog"
   aria-modal="true"
   aria-labelledby="chat-panel-title"
@@ -31,14 +34,14 @@
 
   <!-- Quick Messages (Optional) -->
   <div class="quick-messages d-flex flex-wrap bg-light px-3 py-2">
-    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="Hi there!">
-      Hi there!
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="I want to know more about Salesflow!.">
+      I want to know more about Salesflow!
     </button>
-    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="Can you help me?">
-      Can you help me?
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="i need to understand how this website works.">
+      i need to understand how this website works.
     </button>
-    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="I have a question...">
-      I have a question...
+    <button class="btn btn-sm btn-outline-secondary me-2 mb-2 quick-msg-btn" data-msg="What is your name?">
+      What is your name?
     </button>
     <!-- Add more quick messages as needed -->
   </div>
@@ -47,7 +50,7 @@
   <footer class="chat-footer bg-light p-3">
     <div class="input-group">
       <textarea
-        class="form-control rounded-pill"
+        class="form-control"
         rows="1"
         id="chat-input"
         placeholder="Type a message..."
@@ -74,20 +77,23 @@
   /* Chat Toggle Button */
   .chat-toggle-btn {
     box-shadow: 0 0 12px rgba(13, 110, 253, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .chat-toggle-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(13, 110, 253, 0.6);
+    transform: scale(1.04);
+    box-shadow: 0 4px 18px rgba(13, 110, 253, 0.3);
   }
 
   /* Chat Panel */
   .chat-panel {
-    right: 30px;
-    bottom: 40px;
-    width: 360px;
-    max-width: 90%;
-    max-height: 75vh;
+    top: auto;
+    bottom: 30px;
+    inset: auto 30px 30px auto;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    max-height: 520px;
+    max-height: calc(100vh - 100px);
     background-color: #fff;
     border-radius: 14px;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
@@ -104,6 +110,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+  .chat-panel.show-panel {
+    scroll-margin-top: 0px;
+  }
 
   /* Chat Header */
   .chat-header {
@@ -115,40 +124,45 @@
 
   /* Chat Body */
   .chat-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
     padding: 12px;
-    flex: 1;
     overflow-y: auto;
     background-color: #fafafa;
   }
 
   /* Chat Bubbles (Rounded Rectangle for multi-line) */
   .chat-bubble {
-    margin: 6px 0;
-    padding: 10px 14px;
-    border-radius: 20px; /* Moderate radius for rounded rectangle */
+    display: inline-block;
+    align-self: flex-start; /* default for AI */
+    margin: 4px 0;
+    padding: 6px 12px; /* less vertical padding for smaller bubbles */
+    /* We will set border-radius dynamically via JS. */
     max-width: 75%;
-    line-height: 1.4;
+    line-height: 1.3;
     font-size: 0.95rem;
     white-space: pre-wrap;
     word-wrap: break-word;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px) scale(0.95);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .chat-bubble.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
   .chat-bubble.user {
+    align-self: flex-end;
     background-color: #0d6efd;
     color: #fff;
-    margin-left: auto;
-    margin-right: 5px;
+    margin-right: 6px;
+    max-width: 60%;
+    text-align: left !important;
   }
   .chat-bubble.ai {
     background-color: #ebebeb;
     color: #000;
-    margin-left: 5px;
   }
 
   /* Typing Indicator */
@@ -186,6 +200,94 @@
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
   }
+
+  .quick-messages.hidden {
+    display: none !important;
+  }
+
+  #chat-send-btn {
+    margin-left: 10px;
+  }
+
+  #chat-send-btn:hover {
+    background-color: #0b5ed7;
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(13, 110, 253, 0.3);
+  }
+
+  .chat-bubble.disclaimer {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: flex-start;
+    background-color: #eef6ff;
+    color: #084298;
+    border: 1px solid #b6d4fe;
+    font-size: 0.88rem;
+    padding: 10px 10px 10px 8px;
+    border-radius: 14px;
+    max-width: 95%;
+    line-height: 1.30;
+    letter-spacing: 0.1px;
+    word-spacing: 0px;
+    gap: 10px;
+    margin: 4px 0;
+    align-self: center;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .chat-bubble.disclaimer i {
+    margin-top: 2px;
+    font-size: 1rem;
+  }
+
+  /* Mobile responsive styling */
+  @media (max-width: 480px) {
+    .chat-panel {
+      right: 15px;
+      left: auto;
+      bottom: 90px;
+      width: 95vw;
+      max-width: 95vw;
+      border-radius: 16px;
+      height: 75vh;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
+
+  .chat-toggle-btn:active,
+  #chat-send-btn:active,
+  .quick-msg-btn:active {
+    transform: scale(0.95);
+    filter: brightness(0.95);
+  }
+
+  .chat-toggle-btn,
+  #chat-send-btn,
+  .quick-msg-btn {
+    transition: all 0.15s ease;
+  }
+
+  .cooldown-warning {
+    color: #dc3545;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+  }
+
+  .shake {
+    animation: shake 0.3s ease;
+  }
 </style>
 
 <script>
@@ -198,10 +300,46 @@
     const chatMessages  = document.getElementById('chat-messages');
     const quickMsgCont  = document.querySelector('.quick-messages');
     const quickMsgBtns  = document.querySelectorAll('.quick-msg-btn');
+    let recentMessages = [];
+    
+    let cooldown = false;
+    let cooldownSeconds = 5;
+    let cooldownInterval;
+
+    // Auto-resize the chat input dynamically as the user types
+    function autoResizeTextArea(el) {
+      // Reset height to auto for proper measurement
+      el.style.height = 'auto';
+      let newHeight = el.scrollHeight;
+      const maxHeight = 150; // maximum height in pixels
+      
+      if (newHeight > maxHeight) {
+        newHeight = maxHeight;
+        el.style.overflowY = 'auto';
+      } else {
+        el.style.overflowY = 'hidden';
+      }
+      
+      el.style.height = newHeight + 'px';
+      
+      // Adjust border-radius dynamically: if single line (<=40px) use pill shape; else, use 16px
+      if (newHeight <= 40) {
+        el.style.setProperty('border-radius', '9999px', 'important');
+      } else {
+        el.style.setProperty('border-radius', '16px', 'important');
+      }
+    }
+    
+    chatInput.addEventListener('input', function() {
+      autoResizeTextArea(chatInput);
+    });
 
     // Toggle chat panel
     chatButton.addEventListener('click', () => {
       chatPanel.classList.toggle('show-panel');
+      if (chatPanel.classList.contains('show-panel')) {
+        setTimeout(() => chatInput.focus(), 200);
+      }
     });
 
     // Close chat panel
@@ -219,6 +357,11 @@
 
     // Send on button click
     sendBtn.addEventListener('click', () => {
+      if (cooldown) {
+        sendBtn.classList.add('shake');
+        setTimeout(() => sendBtn.classList.remove('shake'), 400);
+        return;
+      }
       sendMessage();
     });
 
@@ -232,23 +375,39 @@
 
     // Main send message function
     function sendMessage() {
+      const now = Date.now();
+      recentMessages.push(now);
+      recentMessages = recentMessages.filter(ts => now - ts < 3000); // keep only messages in last 3s
+
+      if (recentMessages.length >= 5) {
+        recentMessages = []; // clear out after triggering
+        triggerCooldown();
+        return;
+      }
+      if (cooldown) return;
+
       const userMessage = chatInput.value.trim();
       if (!userMessage) return;
 
       // Hide quick messages immediately on the first user message
-      if (quickMsgCont && quickMsgCont.style.display !== 'none') {
-        quickMsgCont.style.display = 'none';
+      if (quickMsgCont && !quickMsgCont.classList.contains('hidden')) {
+        quickMsgCont.classList.add('hidden');
       }
 
       // Create user bubble
-      createChatBubble(userMessage, 'user');
+      const userBubble = createChatBubble(userMessage, 'user');
       chatInput.value = '';
+      chatInput.style.height = 'auto';
+      chatInput.style.overflowY = 'hidden';
+      chatInput.style.setProperty('border-radius', '9999px', 'important');
+
+      
 
       // Create a typing indicator bubble for AI
       const typingBubble = createTypingBubble();
 
       // Call your existing PHP endpoint
-      fetch('chat.php', {
+      fetch('/salesflow/include/chat.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage })
@@ -257,10 +416,16 @@
       .then(data => {
         typingBubble.textContent = data.reply;
         typingBubble.classList.add('show');
+        setTimeout(() => {
+          finalizeBubble(typingBubble);
+        }, 0);
       })
       .catch(() => {
         typingBubble.textContent = "⚠️ Error: Unable to reach AI server.";
         typingBubble.classList.add('show');
+        setTimeout(() => {
+          finalizeBubble(typingBubble);
+        }, 0);
       });
     }
 
@@ -274,27 +439,100 @@
       // Trigger fade-in
       setTimeout(() => bubble.classList.add('show'), 10);
       chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      finalizeBubble(bubble);
+
       return bubble;
+    }
+
+    // Finalize bubble appearance based on height
+    function finalizeBubble(bubble) {
+      // Wait for layout
+      setTimeout(() => {
+        const height = bubble.offsetHeight;
+        // If it’s short (single line), make it pill-like
+        if (height <= 50) {
+          bubble.style.borderRadius = '9999px';
+        } else {
+          // More lines, smaller radius
+          bubble.style.borderRadius = '16px';
+        }
+      }, 0);
     }
 
     // Create an AI typing indicator bubble
     function createTypingBubble() {
       const bubble = document.createElement('div');
       bubble.classList.add('chat-bubble', 'ai');
+      
       const indicator = document.createElement('div');
       indicator.classList.add('typing-indicator');
       indicator.innerHTML = '<span></span><span></span><span></span>';
       bubble.appendChild(indicator);
+      
       chatMessages.appendChild(bubble);
-
+      
       // Trigger fade-in
       setTimeout(() => bubble.classList.add('show'), 10);
       chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Immediately finalize the bubble to adjust its border-radius
+      finalizeBubble(bubble);
+      
       return bubble;
     }
 
+    // Cooldown function
+    function triggerCooldown() {
+      cooldown = true;
+      let countdown = cooldownSeconds;
+
+      // Disable input and button
+      chatInput.disabled = true;
+      sendBtn.disabled = true;
+
+      // Create or update the warning message
+      let warning = document.getElementById('cooldown-warning');
+      if (!warning) {
+        warning = document.createElement('div');
+        warning.id = 'cooldown-warning';
+        warning.className = 'cooldown-warning text-danger text-center mt-1';
+        warning.style.fontSize = '0.8rem';
+        warning.style.transition = 'opacity 0.3s ease';
+        sendBtn.parentNode.insertBefore(warning, sendBtn.nextSibling);
+      }
+
+      // Change send button to padlock
+      sendBtn.innerHTML = '<i class="fas fa-lock"></i>';
+      sendBtn.classList.remove('btn-primary');
+      sendBtn.classList.add('btn-danger');
+
+      // Start countdown
+      warning.innerHTML = `<i class="fas fa-hourglass-half me-2 text-danger"></i> You're sending messages too fast. Try again in ${countdown}s...`;
+      cooldownInterval = setInterval(() => {
+        countdown--;
+        warning.innerHTML = `<i class="fas fa-hourglass-half me-2 text-danger"></i> You're sending messages too fast. Try again in ${countdown}s...`;
+        if (countdown <= 0) {
+          clearInterval(cooldownInterval);
+          cooldown = false;
+          warning.remove();
+          chatInput.disabled = false;
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+          sendBtn.classList.remove('btn-danger');
+          sendBtn.classList.add('btn-primary');
+        }
+      }, 1000);
+    }
+
     // (Optional) AI greeting on load
+    const disclaimer = document.createElement('div');
+    disclaimer.className = 'chat-bubble disclaimer show';
+    disclaimer.innerHTML = '<i class="fas fa-info-circle me-2"></i> This is just an AI-generated suggestion please dont take it as professional advice. Always use your own judgment or consult an expert when needed.';
+    chatMessages.appendChild(disclaimer);
+    
     createChatBubble("Hi there! How can I help you today?", "ai");
+    autoResizeTextArea(chatInput);
   });
 </script>
 
@@ -308,3 +546,4 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   rel="stylesheet"
 />
+</html>
