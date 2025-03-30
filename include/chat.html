@@ -18,7 +18,7 @@
 <!-- Chat Panel -->
 <aside
   id="ai-chat-panel"
-  class="chat-panel position-fixed shadow show-panel d-flex flex-column"
+  class="chat-panel position-fixed shadow"
   role="dialog"
   aria-modal="true"
   aria-labelledby="chat-panel-title"
@@ -86,14 +86,12 @@
 
   /* Chat Panel */
   .chat-panel {
-    top: auto;
-    bottom: 30px;
-    inset: auto 30px 30px auto;
+    right: 30px;
+    bottom: 100px;
     width: 100%;
     max-width: 420px;
-    height: auto;
-    max-height: 520px;
-    max-height: calc(100vh - 100px);
+    height: 520px;
+    max-height: none;
     background-color: #fff;
     border-radius: 14px;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
@@ -110,9 +108,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-  .chat-panel.show-panel {
-    scroll-margin-top: 0px;
-  }
 
   /* Chat Header */
   .chat-header {
@@ -126,7 +121,7 @@
   .chat-body {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
+    flex: 1;
     padding: 12px;
     overflow-y: auto;
     background-color: #fafafa;
@@ -407,7 +402,7 @@
       const typingBubble = createTypingBubble();
 
       // Call your existing PHP endpoint
-      fetch('/salesflow/include/chat.php', {
+      fetch('chat.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage })
