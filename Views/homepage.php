@@ -18,6 +18,14 @@
   <link rel="stylesheet" href="../public/css/styles.css" />
   <link rel="stylesheet" href="../public/css/floatingMoney.css">
 
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+  </style>
 
   <!-- AOS (Animate On Scroll) for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -37,7 +45,7 @@
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
       </div>
@@ -51,146 +59,63 @@
       <p class="lead">Track expenses, optimize profits, and stay ahead — all in one powerful platform.</p>
       <a href="login.php" class="btn btn-primary btn-lg mt-3">Get Started</a>
     </div>
+  </section>
 
-    <div class="wave-overlay">
-        <svg id="hero-wave" class="data-waves" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-
-            <defs>
-                <filter id="waveFocusBlur" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
-                  <feComponentTransfer>
-                    <feFuncA type="table" tableValues="0 0.5 1 0.5 0" />
-                  </feComponentTransfer>
-                  <feBlend in="SourceGraphic" in2="blur" mode="normal" />
-                </filter>
-              </defs>
-              
-          
-          <!-- Wave Line 1 -->
-          <path d="M0,160 C360,80 1080,240 1440,160" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="12s" repeatCount="indefinite"
-              values="M0,160 C360,80 1080,240 1440,160;
-                      M0,140 C400,100 1040,280 1440,180;
-                      M0,160 C360,80 1080,240 1440,160" />
-          </path>
-      
-          <!-- Wave Line 2 -->
-          <path d="M0,170 C320,100 1060,260 1440,170" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="14s" repeatCount="indefinite"
-              values="M0,170 C320,100 1060,260 1440,170;
-                      M0,160 C400,80 1040,240 1440,160;
-                      M0,170 C320,100 1060,260 1440,170" />
-          </path>
-      
-          <!-- Wave Line 3 -->
-          <path d="M0,180 C280,120 1080,250 1440,180" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="16s" repeatCount="indefinite"
-              values="M0,180 C280,120 1080,250 1440,180;
-                      M0,160 C300,100 1040,230 1440,160;
-                      M0,180 C280,120 1080,250 1440,180" />
-          </path>
-      
-          <!-- Wave Line 4 -->
-          <path d="M0,190 C250,110 1100,270 1440,190" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="18s" repeatCount="indefinite"
-              values="M0,190 C250,110 1100,270 1440,190;
-                      M0,170 C260,90 1000,240 1440,170;
-                      M0,190 C250,110 1100,270 1440,190" />
-          </path>
-      
-          <!-- Wave Line 5 -->
-          <path d="M0,200 C220,130 1120,260 1440,200" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="20s" repeatCount="indefinite"
-              values="M0,200 C220,130 1120,260 1440,200;
-                      M0,180 C240,110 980,250 1440,180;
-                      M0,200 C220,130 1120,260 1440,200" />
-          </path>
-      
-          <!-- Wave Line 6 -->
-          <path d="M0,210 C200,140 1140,250 1440,210" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="22s" repeatCount="indefinite"
-              values="M0,210 C200,140 1140,250 1440,210;
-                      M0,190 C210,110 1040,230 1440,190;
-                      M0,210 C200,140 1140,250 1440,210" />
-          </path>
-      
-          <!-- Wave Line 7 -->
-          <path d="M0,220 C180,150 1160,240 1440,220" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="24s" repeatCount="indefinite"
-              values="M0,220 C180,150 1160,240 1440,220;
-                      M0,200 C200,130 1020,220 1440,200;
-                      M0,220 C180,150 1160,240 1440,220" />
-          </path>
-      
-          <!-- Wave Line 8 -->
-          <path d="M0,230 C160,160 1180,230 1440,230" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="26s" repeatCount="indefinite"
-              values="M0,230 C160,160 1180,230 1440,230;
-                      M0,210 C180,140 1000,210 1440,210;
-                      M0,230 C160,160 1180,230 1440,230" />
-          </path>
-      
-          <!-- Wave Line 9 -->
-          <path d="M0,240 C140,170 1200,220 1440,240" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="28s" repeatCount="indefinite"
-              values="M0,240 C140,170 1200,220 1440,240;
-                      M0,220 C160,150 1000,200 1440,220;
-                      M0,240 C140,170 1200,220 1440,240" />
-          </path>
-      
-          <!-- Wave Line 10 -->
-          <path d="M0,250 C120,180 1220,210 1440,250" stroke="#ffffff44" stroke-width="1.5" fill="none" filter="url(#waveFocusBlur)">
-            <animate attributeName="d" dur="30s" repeatCount="indefinite"
-              values="M0,250 C120,180 1220,210 1440,250;
-                      M0,230 C140,160 1020,190 1440,230;
-                      M0,250 C120,180 1220,210 1440,250" />
-          </path>
-      
-        </svg>
+  <!-- Why SalesFlow Section -->
+  <section class="why-salesflow py-5 bg-light text-center" data-aos="fade-up">
+    <div class="container">
+      <h2 class="mb-4 fw-bold">Why SalesFlow?</h2>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+          <img src="../Assets/Illustrations/grammarcorrection.svg" class="img-fluid mb-3" alt="Why SalesFlow">
+        </div>
+        <div class="col-md-6 text-start">
+          <p class="lead">
+            SalesFlow is built for modern Filipino business owners who want to track income and growth without drowning in spreadsheets. It adapts to chaos rather than trying to control it.
+          </p>
+          <p>
+            Whether you're running a sari-sari store, a small e-commerce shop, or a side hustle, SalesFlow empowers you to make better decisions through clear data, helpful AI insights, and intuitive controls.
+          </p>
+        </div>
       </div>
-      
-      
-      
-      
-
+    </div>
   </section>
 
   <!-- Features Section -->
-  <section class="features py-5 text-center" data-aos="fade-up">
+  <section class="features py-5 text-center" id="features" data-aos="fade-up">
     <div class="container">
       <h2 class="mb-4">Key Features</h2>
-      <div class="row g-4">
-        <!-- Feature 1: Sales Tracker -->
-        <div class="col-md-4">
-          <div class="card h-100 shadow border-0">
-            <div class="card-body">
-              <i class="fas fa-coins fa-3x text-primary mb-3"></i>
-              <h5 class="card-title fw-bold">Sales Tracker</h5>
-              <p class="card-text">Easily input product names, income amounts, and dates to monitor your sales performance in real time.</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Feature 2: Product Analytics -->
-        <div class="col-md-4">
-          <div class="card h-100 shadow border-0">
-            <div class="card-body">
-              <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-              <h5 class="card-title fw-bold">Product Performance</h5>
-              <p class="card-text">Visual analytics to highlight trending and underperforming products based on income data.</p>
-            </div>
-          </div>
+      <!-- Feature 1 -->
+      <div class="row align-items-center mb-5" data-aos="fade-up">
+        <div class="col-md-6">
+          <img src="../Assets/Illustrations/debugdata.svg" class="img-fluid" alt="Sales Tracking">
         </div>
+        <div class="col-md-6 text-start">
+          <h3 class="fw-bold">Track Sales in Real-Time</h3>
+          <p>Easily input product names, income amounts, and dates to monitor your performance with zero hassle.</p>
+        </div>
+      </div>
 
-        <!-- Feature 3: AI Insights -->
-        <div class="col-md-4">
-          <div class="card h-100 shadow border-0">
-            <div class="card-body">
-              <i class="fas fa-robot fa-3x text-info mb-3"></i>
-              <h5 class="card-title fw-bold">AI-Powered Insights</h5>
-              <p class="card-text">Smart suggestions and recommendations generated from your input data to support strategic decisions.</p>
-            </div>
-          </div>
+      <!-- Feature 2 -->
+      <div class="row align-items-center mb-5 flex-md-row-reverse" data-aos="fade-up">
+        <div class="col-md-6">
+          <img src="../Assets/Illustrations/analytics.svg" class="img-fluid" alt="Product Analytics">
+        </div>
+        <div class="col-md-6 text-start">
+          <h3 class="fw-bold">Product Performance</h3>
+          <p>Visual analytics highlight trending and underperforming products to guide your strategy and growth focus.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="row align-items-center mb-5" data-aos="fade-up">
+        <div class="col-md-6">
+          <img src="../Assets/Illustrations/OSupgrade.svg" class="img-fluid" alt="AI Insights">
+        </div>
+        <div class="col-md-6 text-start">
+          <h3 class="fw-bold">AI-Powered Recommendations</h3>
+          <p>Seraphina, your AI assistant, provides insight into sales patterns and suggests improvements based on real data.</p>
         </div>
       </div>
     </div>

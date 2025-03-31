@@ -59,6 +59,7 @@
 </head>
 <body>
   <div class="wrapper">
+    <?php include '../include/chat.html'; ?>
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
       <h1>🔧 Quick Shortcut (Upcoming Feature)</h1>
