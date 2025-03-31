@@ -62,9 +62,81 @@
     <?php include '../include/chat.html'; ?>
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
-      <h1>Welcome to Salesflow</h1>
-      <p>This is Stats.</p>
+      <div class="container-fluid">
+        <h1 class="mb-4 fw-semibold">🧾 Transactions</h1>
+
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <input type="number" id="delete_sale_id" class="form-control" placeholder="Enter Sale ID to Delete">
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-danger" onclick="deleteSale()">🗑️ Delete Sale</button>
+              </div>
+            </div>
+            <div id="salesTable">Loading sales...</div>
+            <div id="result" class="mt-3 text-muted small"></div>
+          </div>
+        </div>
+      </div>
     </main>
+
+    <script>
+      const user_id = 1;
+
+      function getCategoryNameById(categoryId) {
+        return `Category ${categoryId}`;
+      }
+
+      function getSales() {
+        fetch(`../Backend/get_sales.php?user_id=${user_id}`)
+          .then(res => res.json())
+          .then(data => {
+            const rows = data.sales.map(sale => `
+              <tr>
+                <td>${sale.id}</td>
+                <td>${sale.product_name}</td>
+                <td>₱${parseFloat(sale.total_amount).toLocaleString()}</td>
+                <td>${sale.quantity}</td>
+                <td>${getCategoryNameById(sale.category_id)}</td>
+                <td>${sale.sale_date}</td>
+              </tr>`).join('');
+            document.getElementById('salesTable').innerHTML = `
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Qty</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>`;
+          });
+      }
+
+      function deleteSale() {
+        const data = new URLSearchParams();
+        data.append('user_id', user_id);
+        data.append('sale_id', document.getElementById('delete_sale_id').value);
+
+        fetch('../Backend/delete_sale.php', {
+          method: 'POST',
+          body: data
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+          getSales();
+        });
+      }
+
+      window.onload = () => getSales();
+    </script>
   </div>
 </body>
 </html>

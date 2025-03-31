@@ -1,5 +1,5 @@
 <?php session_start(); ?>
-<?php include '../include/chat.html'; ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +31,7 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+  <?php include '../include/chat.html'; ?>
   <!-- JavaScript for interactivity (navbar, chat, etc.) -->
   <script src="../public/js/main.js"></script>
   <script src="../public/js/floatingMoney.js" defer></script>
