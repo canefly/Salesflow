@@ -62,7 +62,7 @@
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
       <h1>Welcome to Salesflow</h1>
-      <p>This is your dashboard. Monitor your insights, track sales, and stay updated all in one place.</p>
+      <p>This is Stats.</p>
     </main>
   </div>
 </body>

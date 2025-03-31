@@ -61,8 +61,19 @@
   <div class="wrapper">
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
-      <h1>Welcome to Salesflow</h1>
-      <p>This is your dashboard. Monitor your insights, track sales, and stay updated all in one place.</p>
+      <h1>🔧 Quick Shortcut (Upcoming Feature)</h1>
+      <p>This feature will allow you to log common sales with a single click — perfect for frequently ordered items. Instead of entering sale data manually, you'll be able to assign shortcuts and instantly populate sales into the system.</p>
+
+      <div style="margin-top: 1.5rem; padding: 1rem 1.5rem; border: 1px solid #ffc107; background-color: #fff8e1; border-radius: 8px;">
+        <h3 style="margin-bottom: 0.5rem;">⏳ Why isn’t it available yet?</h3>
+        <p style="margin-bottom: 0.8rem;">
+          We’re currently refining the database structure to reduce redundancy and ensure scalability. This involves optimizing how shortcut-linked items interact with your sales records, ensuring consistency and performance.
+        </p>
+        <p>
+          💬 Want to follow progress or contribute ideas? Check out the development journey on 
+          <a href="https://github.com/canefly/Salesflow" target="_blank" style="color: #007bff; text-decoration: underline;">GitHub</a> and stay tuned!
+        </p>
+      </div>
     </main>
   </div>
 </body>

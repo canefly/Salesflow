@@ -61,8 +61,25 @@
   <div class="wrapper">
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
-      <h1>Welcome to Salesflow</h1>
-      <p>This is your dashboard. Monitor your insights, track sales, and stay updated all in one place.</p>
+      <h1>👤 User Profile (Upcoming Feature)</h1>
+      <p>This section will allow you to manage and personalize your account on Salesflow. Features include:</p>
+      <ul>
+        <li>🖼️ Upload and update your profile picture</li>
+        <li>📝 Set or edit your full name</li>
+        <li>📧 Verify and manage your email address</li>
+        <li>🎨 Customize your profile preferences</li>
+      </ul>
+
+      <div style="margin-top: 1.5rem; padding: 1rem 1.5rem; border: 1px solid #17a2b8; background-color: #e9f8fb; border-radius: 8px;">
+        <h3 style="margin-bottom: 0.5rem;">⏳ Why isn’t it available yet?</h3>
+        <p style="margin-bottom: 0.8rem;">
+          We're currently laying the foundation for user identity management and account customization. This involves integrating secure authentication and a scalable user settings system.
+        </p>
+        <p>
+          💬 Want to follow development or suggest profile features? Check out the repository on 
+          <a href="https://github.com/canefly/Salesflow" target="_blank" style="color: #007bff; text-decoration: underline;">GitHub</a> and stay tuned!
+        </p>
+      </div>
     </main>
   </div>
 </body>

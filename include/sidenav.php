@@ -1,77 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salesflow Sidenav</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
+<?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salesflow Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+      --sidebar-width: 250px;
+      --sidebar-bg: #212529;
+      --sidebar-hover: #343a40;
+      --sidebar-active: #0d6efd;
+      --text-color: #ffffff;
+      --text-muted: #adb5bd;
+      --transition: all 0.3s ease;
+      --radius: 8px;
+    }
+
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
+      color: #333;
     }
 
     .sidebar {
+      width: 70px;
+      height: 100vh;
       position: fixed;
       top: 0;
       left: 0;
-      height: 100vh;
-      width: 250px;
-      background-color: #212529;
-      transition: all 0.3s ease;
-      overflow-x: hidden;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+      background: var(--sidebar-bg);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
+      transition: var(--transition);
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+      padding-top: 1rem;
     }
 
-    .sidebar.collapsed {
-      width: 70px;
+    .sidebar:not(.collapsed) {
+      width: var(--sidebar-width);
+    }
+
+    .sidebar-header {
+      text-align: center;
+      padding: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--text-color);
     }
 
     .nav-link {
       display: flex;
       align-items: center;
-      gap: 15px;
-      height: 60px;
-      color: #adb5bd;
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
       text-decoration: none;
-      padding-left: 20px;
-      padding-right: 20px;
+      transition: var(--transition);
       border-left: 4px solid transparent;
-      transition: background 0.2s, border 0.2s, color 0.2s;
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 0.95rem;
     }
 
-    .nav-link:hover {
-      background-color: #343a40;
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--sidebar-hover);
       color: #fff;
-      border-left: 4px solid #0d6efd;
-    }
-
-    .sidebar.collapsed .nav-link {
-      justify-content: center;
-      flex-direction: column;
-      padding: 0;
-      gap: 6px;
+      border-left: 4px solid var(--sidebar-active);
     }
 
     .nav-icon {
       width: 30px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
 
     .nav-label {
+      margin-left: 12px;
       white-space: nowrap;
-      transition: opacity 0.3s ease;
-      display: inline-block;
     }
 
     .sidebar.collapsed .nav-label {
@@ -80,81 +91,72 @@
 
     .toggle-btn {
       position: fixed;
-      top: 15px;
-      left: 260px;
-      z-index: 1000;
-      transition: left 0.3s ease;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-      background-color: white;
-      border-radius: 8px;
-      padding: 10px;
-      border: none;
-    }
-
-    .toggle-btn i {
-      color: black;
-      font-size: 1.2rem;
-    }
-
-    .sidebar.collapsed + .toggle-btn {
+      top: 1rem;
       left: 80px;
+      z-index: 1001;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      padding: 0.5rem 0.7rem;
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+      transition: var(--transition);
     }
 
-    .main-content {
-      margin-left: 250px;
-      transition: margin-left 0.3s ease;
-      padding: 20px;
+    .sidebar:not(.collapsed) ~ .toggle-btn {
+      left: calc(var(--sidebar-width) + 10px);
     }
+</style>
+<div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-chart-line"></i> <span class="nav-label">SalesFlow</span>
+    </div>
+    <a href="../Views/dashboard.php" class="nav-link <?= $currentPage == 'dashboard.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <div class="nav-label">Dashboard</div>
+    </a>
+    <a href="../Views/stats.php" class="nav-link <?= $currentPage == 'stats.php.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="nav-label">Stats</div>
+    </a>
+    <a href="../Views/addincome.php" class="nav-link <?= $currentPage == 'addincome.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-plus-circle"></i></div>
+      <div class="nav-label">Add Income</div>
+    </a>
+    <a href="../Views/transaction.php" class="nav-link <?= $currentPage == 'transaction.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-right-left"></i></div>
+      <div class="nav-label">Transaction</div>
+    </a>
+    <a href="../Views/quickshortcut.php" class="nav-link <?= $currentPage == 'quickshortcut.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-bolt"></i></div>
+      <div class="nav-label">Quick Shortcut</div>
+    </a>
+    <a href="../Views/userprofile.php" class="nav-link <?= $currentPage == 'userprofile.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-user"></i></div>
+      <div class="nav-label">User Profile</div>
+    </a>
+    <a href="../Views/settings.php" class="nav-link <?= $currentPage == 'settings.php' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="fas fa-gear"></i></div>
+      <div class="nav-label">Settings</div>
+    </a>
+    <a href="../Backend/logout.php" class="nav-link">
+      <div class="nav-icon"><i class="fas fa-sign-out-alt"></i></div>
+      <div class="nav-label">Logout</div>
+    </a>
+</div>
 
-    .sidebar.collapsed ~ .main-content {
-      margin-left: 70px;
-    }
-
-    .nav-link.coming-soon {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .nav-link.coming-soon:hover {
-      background-color: transparent;
-      border-left: 4px solid transparent;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="sidebar bg-dark" id="sidebar">
-    <a class="nav-link" href="#"><div class="nav-icon"><i class="fas fa-home"></i></div><span class="nav-label">Dashboard</span></a>
-    <a class="nav-link" href="#"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><span class="nav-label">Stats</span></a>
-    <a class="nav-link" href="#"><div class="nav-icon"><i class="fas fa-plus-circle"></i></div><span class="nav-label">Add Income</span></a>
-    <a class="nav-link" href="#"><div class="nav-icon"><i class="fas fa-exchange-alt"></i></div><span class="nav-label">Transaction</span></a>
-    <a class="nav-link coming-soon" href="#"><div class="nav-icon"><i class="fas fa-bolt"></i></div><span class="nav-label">Quick Shortcut</span></a>
-    <a class="nav-link coming-soon" href="#"><div class="nav-icon"><i class="fas fa-user"></i></div><span class="nav-label">User Profile</span></a>
-    <a class="nav-link coming-soon" href="#"><div class="nav-icon"><i class="fas fa-cogs"></i></div><span class="nav-label">Settings</span></a>
-  </div>
-
-  <button class="btn btn-outline-light toggle-btn" onclick="toggleSidebar()">
+<button class="toggle-btn" id="toggleBtn">
     <i class="fas fa-bars"></i>
-  </button>
+</button>
 
-  <div class="main-content" id="main-content">
-    
-  </div>
+<script>
+  (function() {
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
 
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const content = document.getElementById('main-content');
-      const toggleBtn = document.querySelector('.toggle-btn');
+    toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('collapsed');
-      content.classList.toggle('expanded');
-
-      if (sidebar.classList.contains('collapsed')) {
-        toggleBtn.style.left = '80px';
-      } else {
-        toggleBtn.style.left = '260px';
-      }
-    }
-  </script>
-
-</body>
-</html>
+      document.body.classList.toggle('sidebar-collapsed');
+    });
+  })();
+</script>

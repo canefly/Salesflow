@@ -402,7 +402,7 @@
       const typingBubble = createTypingBubble();
 
       // Call your existing PHP endpoint
-      fetch('chat.php', {
+      fetch('../include/chat.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage })
