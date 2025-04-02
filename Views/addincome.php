@@ -71,7 +71,20 @@ if (!isset($_SESSION['user_id'])) {
       font-size: 1rem;
       color: #666;
     }
+      @media (max-width: 768px) {
+    .sidebar {
+      display: none !important;
+    }
 
+    .main-content {
+      margin-left: 0 !important;
+      padding: 20px !important;
+    }
+
+    .toggle-btn {
+      display: none !important;
+    }
+    }
     @media (max-width: 768px) {
       .sidebar {
         position: absolute;
@@ -107,6 +120,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
 <div class="wrapper">
+<?php include '../include/mobile-side-nav.php'; ?>
 <?php include '../include/chat.html'; ?>
 <?php include '../include/sidenav.php'; ?>
 <div class="backdrop" id="backdrop"></div>

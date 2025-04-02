@@ -30,6 +30,21 @@
       min-height: 100vh;
     }
 
+      @media (max-width: 768px) {
+    .sidebar {
+      display: none !important;
+    }
+
+    .main-content {
+      margin-left: 0 !important;
+      padding: 20px !important;
+    }
+
+    .toggle-btn {
+      display: none !important;
+    }
+  }
+
     .sidebar {
       width: var(--sidebar-width);
       transition: width 0.3s ease;
@@ -60,6 +75,7 @@
 </head>
 <body>
   <div class="wrapper">
+    <?php include '../include/mobile-side-nav.php'; ?>
     <?php include '../include/chat.html'; ?>
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">

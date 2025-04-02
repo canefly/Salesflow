@@ -143,6 +143,20 @@
     }
 
     @media (max-width: 768px) {
+    .sidebar {
+      display: none !important;
+    }
+
+    .main-content {
+      margin-left: 0 !important;
+      padding: 20px !important;
+    }
+
+    .toggle-btn {
+      display: none !important;
+    }
+ }
+    @media (max-width: 768px) {
       .sidebar {
         width: var(--sidebar-collapsed-width);
       }
@@ -167,6 +181,7 @@
 </head>
 <body>
   <div class="wrapper">
+    <?php include '../include/mobile-side-nav.php'; ?>
     <?php include '../include/chat.html'; ?>
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">

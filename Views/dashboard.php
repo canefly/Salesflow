@@ -46,6 +46,21 @@
       margin-left: var(--sidebar-width);
     }
 
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none !important;
+      }
+
+      .main-content {
+        margin-left: 0 !important;
+        padding: 20px !important;
+      }
+
+      .toggle-btn {
+        display: none !important;
+      }
+    }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 10px;
