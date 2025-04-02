@@ -59,6 +59,7 @@
 </head>
 <body>
   <div class="wrapper">
+    <?php include '../include/mobile-side-nav.php'; ?>
     <?php include '../include/chat.html'; ?>
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
