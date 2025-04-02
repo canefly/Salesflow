@@ -10,6 +10,14 @@
     <a href="../Views/settings.php" class="fab-button"><i class="fas fa-gear"></i></a>
     <a href="../Backend/logout.php" class="fab-button"><i class="fas fa-sign-out-alt"></i></a>
   </div>
+  <div class="fab-label label-1">Label 1</div>
+  <div class="fab-label label-2">Label 2</div>
+  <div class="fab-label label-3">Label 3</div>
+  <div class="fab-label label-4">Label 4</div>
+  <div class="fab-label label-5">Label 5</div>
+  <div class="fab-label label-6">Label 6</div>
+  <div class="fab-label label-7">Label 7</div>
+  <div class="fab-label label-8">Label 8</div>
 </div>
 
 <style>
@@ -43,6 +51,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: transform 0.1s ease;
+    }
+
+    .fab-main:active {
+      transform: scale(0.9);
+      transition: transform 0.1s ease;
     }
 
     .fab-menu {
@@ -79,9 +93,15 @@
       opacity: 0;
     }
 
+    .fab-button:active {
+      transform: scale(0.9) translateY(1px);
+      transition: transform 0.1s ease;
+    }
+
     .fab-menu.show .fab-button {
       transform: scale(1) translateY(0);
       opacity: 1;
+      transition: all 0.3s ease;
     }
 
     .fab-menu.show .fab-button:nth-child(1) {
@@ -107,6 +127,34 @@
     }
     .fab-menu.show .fab-button:nth-child(8) {
       transition-delay: 0s;
+    }
+
+    .label-1 { bottom: calc(70px + 0 * 3.75rem + 5px); right: 70px; }
+    .label-2 { bottom: calc(70px + 1 * 3.75rem + 5px); right: 70px; }
+    .label-3 { bottom: calc(70px + 2 * 3.75rem + 5px); right: 70px; }
+    .label-4 { bottom: calc(70px + 3 * 3.75rem + 5px); right: 70px; }
+    .label-5 { bottom: calc(70px + 4 * 3.75rem + 5px); right: 70px; }
+    .label-6 { bottom: calc(70px + 5 * 3.75rem + 5px); right: 70px; }
+    .label-7 { bottom: calc(70px + 6 * 3.75rem + 5px); right: 70px; }
+    .label-8 { bottom: calc(70px + 7 * 3.75rem + 5px); right: 70px; }
+
+    .fab-label {
+      display: none;
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+
+    .fab-menu.show ~ .fab-label {
+      display: block;
     }
   }
 </style>
