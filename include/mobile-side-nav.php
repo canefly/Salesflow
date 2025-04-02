@@ -46,11 +46,23 @@
     }
 
     .fab-menu {
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       margin-bottom: 1rem;
       gap: 0.75rem;
+      position: absolute;
+      bottom: 70px;
+      right: 5px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .fab-menu.show {
+      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .fab-button {
@@ -63,6 +75,38 @@
       line-height: 50px;
       font-size: 1.2rem;
       transition: all 0.3s ease;
+      transform: scale(0.5) translateY(20px);
+      opacity: 0;
+    }
+
+    .fab-menu.show .fab-button {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .fab-menu.show .fab-button:nth-child(1) {
+      transition-delay: 0.35s;
+    }
+    .fab-menu.show .fab-button:nth-child(2) {
+      transition-delay: 0.3s;
+    }
+    .fab-menu.show .fab-button:nth-child(3) {
+      transition-delay: 0.25s;
+    }
+    .fab-menu.show .fab-button:nth-child(4) {
+      transition-delay: 0.2s;
+    }
+    .fab-menu.show .fab-button:nth-child(5) {
+      transition-delay: 0.15s;
+    }
+    .fab-menu.show .fab-button:nth-child(6) {
+      transition-delay: 0.1s;
+    }
+    .fab-menu.show .fab-button:nth-child(7) {
+      transition-delay: 0.05s;
+    }
+    .fab-menu.show .fab-button:nth-child(8) {
+      transition-delay: 0s;
     }
   }
 </style>
@@ -72,7 +116,7 @@
     const toggle = document.getElementById('fabToggle');
     const menu = document.querySelector('.fab-menu');
     toggle.addEventListener('click', function () {
-      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+      menu.classList.toggle('show');
     });
   });
 </script>
