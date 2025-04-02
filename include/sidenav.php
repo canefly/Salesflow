@@ -115,7 +115,7 @@
       <div class="nav-icon"><i class="fas fa-home"></i></div>
       <div class="nav-label">Dashboard</div>
     </a>
-    <a href="../Views/stats.php" class="nav-link <?= $currentPage == 'stats.php.php' ? 'active' : '' ?>">
+    <a href="../Views/stats.php" class="nav-link <?= $currentPage == 'stats.php' ? 'active' : '' ?>">
       <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
       <div class="nav-label">Stats</div>
     </a>
