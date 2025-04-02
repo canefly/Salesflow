@@ -8,16 +8,17 @@
     <a href="../Views/quickshortcut.php" class="fab-button"><i class="fas fa-bolt"></i></a>
     <a href="../Views/userprofile.php" class="fab-button"><i class="fas fa-user"></i></a>
     <a href="../Views/settings.php" class="fab-button"><i class="fas fa-gear"></i></a>
-    <a href="../Backend/logout.php" class="fab-button"><i class="fas fa-sign-out-alt"></i></a>
+    <a href="#" class="fab-button" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></a>
   </div>
-  <div class="fab-label label-1">Label 1</div>
-  <div class="fab-label label-2">Label 2</div>
-  <div class="fab-label label-3">Label 3</div>
-  <div class="fab-label label-4">Label 4</div>
-  <div class="fab-label label-5">Label 5</div>
-  <div class="fab-label label-6">Label 6</div>
-  <div class="fab-label label-7">Label 7</div>
-  <div class="fab-label label-8">Label 8</div>
+  <div id="logoutModal" class="logout-modal">
+    <div class="logout-modal-content">
+      <p>Are you sure you want to log out?</p>
+      <div class="logout-modal-buttons">
+        <button id="confirmLogout" class="confirm-btn">Yes</button>
+        <button id="cancelLogout" class="cancel-btn">No</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -129,32 +130,60 @@
       transition-delay: 0s;
     }
 
-    .label-1 { bottom: calc(70px + 0 * 3.75rem + 5px); right: 70px; }
-    .label-2 { bottom: calc(70px + 1 * 3.75rem + 5px); right: 70px; }
-    .label-3 { bottom: calc(70px + 2 * 3.75rem + 5px); right: 70px; }
-    .label-4 { bottom: calc(70px + 3 * 3.75rem + 5px); right: 70px; }
-    .label-5 { bottom: calc(70px + 4 * 3.75rem + 5px); right: 70px; }
-    .label-6 { bottom: calc(70px + 5 * 3.75rem + 5px); right: 70px; }
-    .label-7 { bottom: calc(70px + 6 * 3.75rem + 5px); right: 70px; }
-    .label-8 { bottom: calc(70px + 7 * 3.75rem + 5px); right: 70px; }
-
-    .fab-label {
+    .logout-modal {
       display: none;
-      position: absolute;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(8px);
-      color: black;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(4px);
+      background-color: rgba(0,0,0,0.3);
+      justify-content: center;
+      align-items: center;
     }
 
-    .fab-menu.show ~ .fab-label {
-      display: block;
+    .logout-modal-content {
+      background: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .logout-modal-buttons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .confirm-btn, .cancel-btn {
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .confirm-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #6c757d;
+      color: white;
+    }
+
+    .confirm-btn:hover {
+      background: #bb2d3b;
+    }
+
+    .cancel-btn:hover {
+      background: #5c636a;
     }
   }
 </style>
@@ -165,6 +194,24 @@
     const menu = document.querySelector('.fab-menu');
     toggle.addEventListener('click', function () {
       menu.classList.toggle('show');
+    });
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+    const confirmLogout = document.getElementById('confirmLogout');
+    const cancelLogout = document.getElementById('cancelLogout');
+
+    logoutBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      logoutModal.style.display = 'flex';
+    });
+
+    confirmLogout.addEventListener('click', function () {
+      window.location.href = '../Backend/logout.php';
+    });
+
+    cancelLogout.addEventListener('click', function () {
+      logoutModal.style.display = 'none';
     });
   });
 </script>
