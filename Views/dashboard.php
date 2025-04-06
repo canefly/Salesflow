@@ -93,7 +93,7 @@ if (!isset($_SESSION['user_id'])) {
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
       <div class="container-fluid">
-        $1
+      
 
 <!-- Scope Filter & Date Range -->
 <div class="d-flex justify-content-between align-items-center mb-4">
