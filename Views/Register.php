@@ -1,10 +1,16 @@
 <?php
 session_start();
+
 if (isset($_SESSION['user_id'])) {
-  header("Location: dashboard.php");
+  if (isset($_SESSION['first_time']) && $_SESSION['first_time'] === true) {
+    header("Location: setup.php"); // 🚀 Send them to onboarding
+  } else {
+    header("Location: dashboard.php"); // 🧭 Normal user goes home
+  }
   exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
