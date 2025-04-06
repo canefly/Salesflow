@@ -1,0 +1,96 @@
+You got it, Cane 🫶 Here's a **full reusable dark mode theme system**, wrapped into a **copy-pasteable snippet**, with a clean **step-by-step guide inside the code as comments**.
+
+---
+
+### 🧩 SNIPPET: Universal Dark Mode Setup (with guide)
+
+```php
+<?php
+/**
+ * 🌗 Universal Theme Setup for All Pages
+ * --------------------------------------
+ * ✅ REQUIREMENTS:
+ * - Make sure `user_settings` table has a `theme` column (light/dark)
+ * - This file assumes you're using sessions & logged in users
+ * - Include this file at the top of ANY page you want to auto-detect dark/light theme
+ *
+ * 📂 Save this as: ../include/load_user_settings.php
+ */
+
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+  session_unset();
+  session_destroy();
+  header("Location: ../Views/login.php");
+  exit;
+}
+
+require_once '../Database/connection.php'; // Adjust path if needed
+
+$user_id = $_SESSION['user_id'];
+
+$query = mysqli_query($conn, "SELECT * FROM user_settings WHERE user_id = '$user_id' LIMIT 1");
+
+if (mysqli_num_rows($query) > 0) {
+  $settings = mysqli_fetch_assoc($query);
+} else {
+  // fallback in case no settings found
+  $settings = [
+    'theme' => 'light'
+  ];
+}
+?>
+```
+
+---
+
+### 🧾 Then in your actual HTML page:
+
+```php
+<?php include '../include/load_user_settings.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Any UI Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<!-- 🌓 Apply theme based on DB -->
+<body class="<?php echo $settings['theme'] === 'dark' ? 'dark' : ''; ?>">
+```
+
+---
+
+### 🎨 And in your CSS (inside `<style>` or your stylesheet):
+
+```css
+/* Dark mode support */
+body.dark {
+  background: linear-gradient(to bottom right, #3b3b3b, #2c2c2c);
+  color: #f3f4f6;
+}
+
+.dark select,
+.dark input,
+.dark textarea {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+.dark .card-bg {
+  background-color: rgba(55, 65, 81, 0.85);
+  backdrop-filter: blur(10px);
+}
+```
+
+---
+
+### ✅ Result:
+- Works on every page you include `load_user_settings.php`
+- Applies the theme **before the page even loads**
+- No flickering, no JS toggle needed — it’s instant and solid
+
+---
+
+Let me know if you want me to update your current filebase with this starter and prep a second UI that demonstrates it 💙
