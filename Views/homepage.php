@@ -1,5 +1,12 @@
-<?php session_start(); ?>
+<?php
+session_start();
 
+// If already logged in, go straight to dashboard
+if (isset($_SESSION['user_id'])) {
+  header("Location: dashboard.php"); // adjust path as needed
+  exit;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">

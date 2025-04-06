@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+  // Not logged in = get out
+  session_unset();
+  session_destroy();
+  header("Location: ../Views/login.php"); // adjust path if needed
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
