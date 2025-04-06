@@ -128,16 +128,16 @@ if (!isset($_SESSION['first_time']) || $_SESSION['first_time'] !== true) {
         <div class="mb-3">
           <label class="form-label">Currency Symbol</label>
           <select class="form-select" id="currency">
-            <option value="PHP">Philippine Peso (₱)</option>
+            <option value="₱">Philippine Peso (₱)</option>
             <option value="USD">US Dollar ($)</option>
-            <option value="EUR">Euro (€)</option>
-            <option value="GBP">British Pound (£)</option>
-            <option value="JPY">Japanese Yen (¥)</option>
-            <option value="KRW">South Korean Won (₩)</option>
-            <option value="CNY">Chinese Yuan (¥)</option>
-            <option value="INR">Indian Rupee (₹)</option>
-            <option value="AUD">Australian Dollar (A$)</option>
-            <option value="CAD">Canadian Dollar (C$)</option>
+            <option value="$">Euro (€)</option>
+            <option value="£">British Pound (£)</option>
+            <option value="¥">Japanese Yen (¥)</option>
+            <option value="₩">South Korean Won (₩)</option>
+            <option value="¥">Chinese Yuan (¥)</option>
+            <option value="₹">Indian Rupee (₹)</option>
+            <option value="A$">Australian Dollar (A$)</option>
+            <option value="C$">Canadian Dollar (C$)</option>
           </select>
         </div>
         <div class="form-check mb-3">
