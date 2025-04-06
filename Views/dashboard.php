@@ -6,6 +6,8 @@
   <title>Salesflow — Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     :root {
       --sidebar-width: 250px;
@@ -79,151 +81,207 @@
     <?php include '../include/sidenav.php'; ?>
     <main class="main-content">
       <div class="container-fluid">
-        <h1 class="mb-5 fw-semibold">Dashboard Overview</h1>
-        <div class="row">
-          <!-- Left Column: Sales Analytics -->
-          <div class="col-md-8 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h5 class="card-title fw-bold mb-4">Sales Analytics</h5>
-                <canvas id="salesChart" style="height:300px;"></canvas>
+        $1
+
+<!-- Scope Filter & Date Range -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-primary active" onclick="setScope('weekly')">Weekly</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setScope('monthly')">Monthly</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setScope('yearly')">Yearly</button>
+    </div>
+  </div>
+  <div class="text-muted" id="scopeRange">Showing: March 30, 2025 – April 4, 2025</div>
+</div>
+
+        <!-- Top Stats Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+              <div class="card-body d-flex align-items-center">
+                <i class="bi bi-currency-exchange fs-3 text-primary me-3"></i>
+                <div>
+                  <h6 class="mb-0">Total Sales Today</h6>
+                  <p class="mb-0">₱2,150.00</p>
+                </div>
               </div>
             </div>
           </div>
-          <!-- Right Column: Sales Summary Overview -->
-          <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h5 class="card-title fw-bold mb-4">Sales Summary Breakdown</h5>
-                <canvas id="summaryChart" style="height:300px;"></canvas>
+          <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+              <div class="card-body d-flex align-items-center">
+                <i class="bi bi-box fs-3 text-success me-3"></i>
+                <div>
+                  <h6 class="mb-0">Items Sold</h6>
+                  <p class="mb-0">36 Items</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="card shadow-sm border-0 mt-4">
-              <div class="card-body">
-                <h5 class="card-title fw-bold mb-4">Recent Sales</h5>
-                <div id="salesTable" class="table-responsive text-center">
-                  <p>Loading recent sales...</p>
+          <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+              <div class="card-body d-flex align-items-center">
+                <i class="bi bi-bar-chart fs-3 text-warning me-3"></i>
+                <div>
+                  <h6 class="mb-0">Top Category</h6>
+                  <p class="mb-0">Snacks</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4 align-items-stretch">
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header fw-semibold">Sales Over Time</div>
+      <div class="card-body d-flex align-items-center justify-content-center">
+        <canvas id="salesChart" style="max-width: 100%; max-height: 300px;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header fw-semibold">Category Breakdown</div>
+      <div class="card-body d-flex align-items-center justify-content-center">
+        <canvas id="categoryChart" style="max-width: 100%; max-height: 300px;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Sales Log Preview -->
+        <div class="card shadow-sm border-0">
+          <div class="card-header fw-semibold">Recent Sales Logs</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2025-04-06</td>
+                    <td>Coca Cola</td>
+                    <td>Drinks</td>
+                    <td>5</td>
+                    <td>₱75.00</td>
+                  </tr>
+                  <tr>
+                    <td>2025-04-06</td>
+                    <td>Chippy</td>
+                    <td>Snacks</td>
+                    <td>8</td>
+                    <td>₱112.00</td>
+                  </tr>
+                  <tr>
+                    <td>2025-04-06</td>
+                    <td>Lucky Me Pancit</td>
+                    <td>Instant Meals</td>
+                    <td>3</td>
+                    <td>₱45.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      // Sales Chart (Line)
-      const ctx = document.getElementById('salesChart').getContext('2d');
-      const salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Total Income',
-            data: [1200, 2500, 1800, 3000, 2700, 3500],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true },
-            title: { display: true, text: 'Monthly Sales Trend' }
-          }
-        }
-      });
 
-      // Summary Chart (Bar)
-      const ctx3 = document.getElementById('summaryChart').getContext('2d');
-      const summaryChart = new Chart(ctx3, {
-        type: 'bar',
-        data: {
-          labels: ['Total Income', 'Total Sales', 'Total Items', 'Total Categories'],
-          datasets: [{
-            label: 'Summary',
-            data: [14250, 380, 94, 8],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(255, 159, 64, 0.6)',
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(153, 102, 255, 0.6)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Sales Summary Breakdown' }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function setScope(scope) {
+  const rangeDisplay = document.getElementById('scopeRange');
+  let newRange = '';
 
-      // Dummy category mapper (replace with backend or dynamic version)
-      function getCategoryNameById(id) {
-        const map = {
-          1: 'Food', 2: 'Drink', 3: 'Merch'
-        };
-        return map[id] || 'Unknown';
-      }
+  if (scope === 'weekly') {
+    newRange = 'Showing: March 30, 2025 – April 4, 2025';
+  } else if (scope === 'monthly') {
+    newRange = 'Showing: April 2025';
+  } else if (scope === 'yearly') {
+    newRange = 'Showing: 2025';
+  }
 
-      function getSales() {
-        const user_id = 1; // replace with actual session user_id if dynamic
-        fetch(`../Backend/get_sales.php?user_id=1`)
-          .then(res => res.json())
-          .then(data => {
-            const rows = data.sales.map(sale => `
-              <tr>
-                <td>${sale.id}</td>
-                <td>${sale.product_name}</td>
-                <td>${sale.total_amount}</td>
-                <td>${sale.quantity || '-'}</td>
-                <td>${getCategoryNameById(sale.category_id)}</td>
-                <td>${sale.sale_date}</td>
-              </tr>`).join('');
-            document.getElementById('salesTable').innerHTML = `
-              <table class="table table-bordered">
-                <thead class="table-light">
-                  <tr>
-                    <th>ID</th>
-                    <th>Product</th>
-                    <th>Amount</th>
-                    <th>Qty</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>${rows}</tbody>
-              </table>`;
-          })
-          .catch(() => {
-            document.getElementById('salesTable').innerHTML = `<p class="text-danger">Failed to load sales data.</p>`;
-          });
-      }
+  document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.btn-group button[onclick="setScope('${scope}')"]`).classList.add('active');
+  rangeDisplay.textContent = newRange;
+  updateChartsForScope(scope);
+}
 
-      // Call fetch for table
-      getSales();
-    });
-  </script>
+function updateChartsForScope(scope) {
+  let salesData = [], labels = [], categoryData = [], categoryLabels = [];
+
+  if (scope === 'weekly') {
+    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    salesData = [250, 320, 180, 420, 530, 680, 750];
+    categoryLabels = ['Snacks', 'Drinks', 'Instant Meals'];
+    categoryData = [48, 28, 24];
+  } else if (scope === 'monthly') {
+    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    salesData = [1100, 980, 1230, 1400];
+    categoryLabels = ['Snacks', 'Drinks', 'Frozen Goods'];
+    categoryData = [120, 90, 40];
+  } else if (scope === 'yearly') {
+    labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    salesData = [4500, 4700, 5100, 6000, 5800, 6200];
+    categoryLabels = ['Snacks', 'Drinks', 'Stationery'];
+    categoryData = [360, 220, 140];
+  }
+
+  salesChart.data.labels = labels;
+  salesChart.data.datasets[0].data = salesData;
+  salesChart.update();
+
+  categoryChart.data.labels = categoryLabels;
+  categoryChart.data.datasets[0].data = categoryData;
+  categoryChart.update();
+}
+
+const salesChart = new Chart(document.getElementById('salesChart'), {
+  type: 'line',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{
+      label: '₱ Sales',
+      data: [250, 320, 180, 420, 530, 680, 750],
+      borderColor: '#0d6efd',
+      backgroundColor: 'rgba(13, 110, 253, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } }
+  }
+});
+
+const categoryChart = new Chart(document.getElementById('categoryChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Snacks', 'Drinks', 'Instant Meals'],
+    datasets: [{
+      label: 'Sales by Category',
+      data: [48, 28, 24],
+      backgroundColor: ['#ffc107', '#198754', '#dc3545']
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+</script>
 </body>
 </html>
