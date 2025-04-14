@@ -28,17 +28,17 @@
 - [ ] Link sidebar nav to Income, Trends, Reports, Settings pages
 - [ ] Dummy pages for now (or create placeholders)
 
-#### 4. 🧠 Seraphina AI
+4. 🧠 Seraphina AI
 - [ ] Chat log saving in `ai_logs` table
 - [ ] Ability to answer based on user product/sales records
 - [ ] Time-based queries support ("what sold most last week?")
 
-#### 5. 🌙 User Personalization
+5. 🌙 User Personalization
 - [ ] Theme switcher (dark/light)
 - [ ] User settings (from `user_settings` table)
 - [ ] Show profile picture on sidebar (optional)
 
-#### 6. 📤 Export Options
+6. 📤 Export Options
 - [ ] Export analytics to Excel/CSV
 - [ ] Import products from CSV
 
