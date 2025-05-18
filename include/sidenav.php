@@ -80,10 +80,11 @@
     <div class="nav-icon"><i class="fas fa-home"></i></div>
     <div class="nav-label">Dashboard</div>
   </a>
+<!-- /.  
   <a href="../Views/stats.php"       class="nav-link <?= $currentPage=='stats.php'       ? 'active':'' ?>">
     <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
     <div class="nav-label">Stats</div>
-  </a>
+  </a>--> 
   <a href="../Views/addincome.php"   class="nav-link <?= $currentPage=='addincome.php'   ? 'active':'' ?>">
     <div class="nav-icon"><i class="fas fa-plus-circle"></i></div>
     <div class="nav-label">Add Income</div>
@@ -96,14 +97,18 @@
     <div class="nav-icon"><i class="fas fa-bolt"></i></div>
     <div class="nav-label">Quick Shortcut</div>
   </a>
+  
+  <!--
   <a href="../Views/userprofile.php" class="nav-link <?= $currentPage=='userprofile.php' ? 'active':'' ?>">
     <div class="nav-icon"><i class="fas fa-user"></i></div>
     <div class="nav-label">User Profile</div>
-  </a>
+  </a> --> 
+
+  <!--
   <a href="../Views/settings.php"    class="nav-link <?= $currentPage=='settings.php'    ? 'active':'' ?>">
     <div class="nav-icon"><i class="fas fa-gear"></i></div>
     <div class="nav-label">Settings</div>
-  </a>
+  </a> --> 
   <a href="../Backend/logout.php" class="nav-link">
     <div class="nav-icon"><i class="fas fa-sign-out-alt"></i></div>
     <div class="nav-label">Logout</div>
