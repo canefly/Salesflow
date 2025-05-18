@@ -177,14 +177,7 @@ if (mysqli_num_rows($query) > 0) {
           <span>Settings</span>
         </h1>
         <form id="settingsForm" action="../backend/update_settings.php" method="POST" class="space-y-6">
-          <!-- Use Subcategories (toggle switch) -->
-          <div class="flex items-center justify-between">
-            <label for="use_subcategories" class="text-base font-medium">Use Subcategories</label>
-            <label class="switch cursor-pointer">
-              <input id="use_subcategories" name="use_subcategories" type="checkbox" class="sr-only" <?php if($settings['use_subcategories']) echo 'checked'; ?>>
-              <span class="slider"></span>
-            </label>
-          </div>
+          
 
           <!-- Theme Selector -->
           <div>
