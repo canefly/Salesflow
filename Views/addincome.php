@@ -80,18 +80,21 @@ if (isset($_GET['action'])) {
         exit;
     }
 
-    /* add sale — total comes from front-end */
+    /* add sale — takes sale_date from front-end */
     if ($a === 'add_sale') {
         $product = trim($_POST['product'] ?? '');
         $qty     = (int)$_POST['qty'];
         $amount  = (float)$_POST['amount'];
         $cid     = (int)$_POST['category_id'];
+        $sdate   = trim($_POST['sale_date'] ?? '');                 // ISO string or empty
         if ($product===''||$qty<=0||$amount<=0||$cid<=0)
             die(json_encode(['status'=>'error','message'=>'Invalid data']));
+        if ($sdate === '') $sdate = date('Y-m-d H:i:s');
+
         $stmt=$conn->prepare(
-            "INSERT INTO sales (user_id, category_id, product_name, quantity, total_amount)
-             VALUES (?,?,?,?,?)");
-        $stmt->bind_param('iisid', $user_id, $cid, $product, $qty, $amount);
+            "INSERT INTO sales (user_id, category_id, product_name, quantity, total_amount, sale_date)
+             VALUES (?,?,?,?,?,?)");
+        $stmt->bind_param('iisids', $user_id, $cid, $product, $qty, $amount, $sdate);
         echo json_encode($stmt->execute()
                ? ['status'=>'success']
                : ['status'=>'error','message'=>'Sale insert failed']);
@@ -181,6 +184,16 @@ body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
             </div>
           </div>
 
+          <div class="mb-3 d-flex align-items-end">
+            <div class="flex-grow-1 me-2">
+              <label class="form-label" for="date-display">Date</label>
+              <input id="date-display" class="form-control" readonly>
+            </div>
+            <button id="open-date" type="button" class="btn btn-outline-secondary mb-1" title="Change date">
+              <i class="fas fa-calendar-alt"></i>
+            </button>
+          </div>
+
           <div id="total-banner" class="alert alert-info p-2 mb-3">
             Total: ₱<span id="total-display">0.00</span>
           </div>
@@ -224,6 +237,20 @@ body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
       </div></div>
     </div>
 
+    <!-- date modal -->
+    <div class="modal fade" id="date-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+        <div class="modal-body text-center">
+          <p>Select date &amp; time</p>
+          <input id="date-picker" type="datetime-local" class="form-control mb-3">
+          <div class="d-flex justify-content-center">
+            <button id="date-save" class="btn btn-secondary me-3">Apply</button>
+            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
   </main>
 </div>
 
@@ -244,6 +271,7 @@ const list  = $('#category-list'),
       sel   = $('#category-select'),
       delM  = new bootstrap.Modal('#delete-modal'),
       renM  = new bootstrap.Modal('#rename-modal'),
+      dateM = new bootstrap.Modal('#date-modal'),
       delMsg=$('#delete-message'),
       delBtn=$('#confirm-delete'),
       renBtn=$('#confirm-rename'),
@@ -272,9 +300,7 @@ function draw(){
     const opt=document.createElement('option'); opt.value=c.id; opt.textContent=c.category_name; sel.append(opt);
   });
 }
-function initTips(){
-  document.querySelectorAll('[data-bs-toggle=\"tooltip\"]').forEach(el=>new bootstrap.Tooltip(el));
-}
+function initTips(){document.querySelectorAll('[data-bs-toggle=\"tooltip\"]').forEach(el=>new bootstrap.Tooltip(el));}
 
 /* add category */
 $('#add-category').onclick=()=>{
@@ -295,7 +321,7 @@ function openDelete(i){
       if(j.count>0){
         delMsg.textContent=`Deleting will remove ${j.count} linked sale${j.count!=1?'s':''}. Continue?`;
         let s=3; delBtn.disabled=true; delBtn.textContent=`Delete (${s})`;
-        const t=setInterval(()=>{s--; delBtn.textContent=`Delete (${s})`;
+        const t=setInterval(()=>{s--;delBtn.textContent=`Delete (${s})`;
           if(s===0){clearInterval(t); delBtn.disabled=false; delBtn.textContent='Delete';}},1000);
       }else{
         delMsg.textContent='Delete this category?'; delBtn.disabled=false; delBtn.textContent='Delete';
@@ -325,8 +351,24 @@ renBtn.onclick=()=>{
     });
 };
 
-/* ---------- income / total ---------- */
-const price=$('#unit-price'), qty=$('#quantity'), totWrap=$('#total-banner'), totDisp=$('#total-display');
+/* ---------- income / date & total ---------- */
+const price=$('#unit-price'),
+      qty  =$('#quantity'),
+      totWrap=$('#total-banner'),
+      totDisp=$('#total-display'),
+      dateDisp=$('#date-display'),
+      datePicker=$('#date-picker');
+
+/* set today */
+const nowISO = new Date().toISOString().slice(0,16);
+dateDisp.value = new Date().toLocaleString('sv-SE',{hour12:false}).replace(' ',' Time: ');
+datePicker.value = nowISO;
+
+/* open calendar */
+$('#open-date').onclick=()=>{ datePicker.value = dateDisp.value; dateM.show(); };
+$('#date-save').onclick=()=>{ dateDisp.value = datePicker.value; dateM.hide(); };
+
+/* total calc */
 function calcTotal(){
   const p = parseFloat(price.value)||0,
         q = parseInt(qty.value)||0,
@@ -339,15 +381,19 @@ price.oninput=calcTotal; qty.oninput=calcTotal;
 /* save sale */
 $('#income-form').onsubmit=e=>{
   e.preventDefault(); calcTotal();
-  const p = parseFloat(price.value)||0, q = parseInt(qty.value)||0,
-        amount = p*q;
+  const unit = parseFloat(price.value)||0,
+        qv   = parseInt(qty.value)||0,
+        total= unit*qv;
   const data = new URLSearchParams();
   data.append('product',$('#product-name').value);
-  data.append('qty',q); data.append('amount',amount);
+  data.append('qty',qv); data.append('amount',total);
   data.append('category_id', sel.value);
+  data.append('sale_date', dateDisp.value);          // ISO string
   fetch('?action=add_sale',{method:'POST',body:data})
     .then(r=>r.json()).then(j=>{
-      j.status==='success'?( notify('Sale recorded'), e.target.reset(), totWrap.style.display='none', fetchCats() )
+      j.status==='success'?( notify('Sale recorded'), e.target.reset(),
+                             totWrap.style.display='none', dateDisp.value=new Date().toLocaleString('sv-SE',{hour12:false}).replace(' ',' Time: '),
+                             fetchCats() )
                           : notify(j.message);
     });
 };
