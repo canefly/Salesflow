@@ -2,12 +2,12 @@
   <button id="fabToggle" class="fab-main"><i class="fas fa-ellipsis-v"></i></button>
   <div class="fab-menu">
     <a href="../Views/dashboard.php" class="fab-button"><i class="fas fa-home"></i></a>
-    <a href="../Views/stats.php" class="fab-button"><i class="fas fa-chart-line"></i></a>
+   <!-- <a href="../Views/stats.php" class="fab-button"><i class="fas fa-chart-line"></i></a> --> 
     <a href="../Views/addincome.php" class="fab-button"><i class="fas fa-plus-circle"></i></a>
     <a href="../Views/transaction.php" class="fab-button"><i class="fas fa-right-left"></i></a>
     <a href="../Views/quickshortcut.php" class="fab-button"><i class="fas fa-bolt"></i></a>
-    <a href="../Views/userprofile.php" class="fab-button"><i class="fas fa-user"></i></a>
-    <a href="../Views/settings.php" class="fab-button"><i class="fas fa-gear"></i></a>
+   <!-- <a href="../Views/userprofile.php" class="fab-button"><i class="fas fa-user"></i></a> --> 
+    <!-- <a href="../Views/settings.php" class="fab-button"><i class="fas fa-gear"></i></a> --> 
     <a href="#" class="fab-button" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></a>
   </div>
   <div id="logoutModal" class="logout-modal">
