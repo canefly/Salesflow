@@ -127,25 +127,55 @@ $dashboardData=[
 
 <style>
 :root{
-  --sidebar-wide:250px;
-  --sidebar-narrow:70px;
+  /* keep the simple v1 names so future devs recognise them */
+  --sidebar-width:250px;
+  --sidebar-collapsed-width:70px;
 }
-/* core layout ------------------------------------------------------ */
+
+/* -------------------------------------------------- core reset */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Poppins,sans-serif;background:#f5f5f5;color:#333}
+body{
+  font-family:Poppins,sans-serif;
+  background:#f5f5f5;
+  color:#333;
+}
+
 .wrapper{display:flex;min-height:100vh}
-.sidebar{width:var(--sidebar-wide);transition:.3s}
-.sidebar.collapsed{width:var(--sidebar-narrow)}
-.main-content{flex:1;padding:40px;margin-left:var(--sidebar-narrow);
-  transition:.3s;min-width:0}           /* <-- allows extra squeeze */
-.sidebar:not(.collapsed)~.main-content{margin-left:var(--sidebar-wide)}
+
+/* -------------------------------------------------- sidebar */
+.sidebar{
+  width:var(--sidebar-width);
+  transition:width .3s ease;
+}
+.sidebar.collapsed{width:var(--sidebar-collapsed-width)}
+
+/* -------------------------------------------------- main pane */
+.main-content{
+  flex:1;
+  padding:40px;
+  margin-left:var(--sidebar-collapsed-width);
+  transition:margin-left .3s ease;
+  min-width:0;               /* ⬅ lets the flex-child squeeze smaller */
+}
+.sidebar:not(.collapsed) ~ .main-content{
+  margin-left:var(--sidebar-width);
+}
+
+/* -------------------------------------------------- headings */
+h1{font-size:2rem;margin-bottom:10px}
+p {font-size:1rem;color:#666}
+
+/* -------------------------------------------------- breakpoints */
 @media(max-width:768px){
-  .sidebar{display:none!important}
-  .main-content{margin:0;padding:20px}
+  .sidebar{display:none!important;}
+  .main-content{margin-left:0!important;padding:20px!important;}
+  .toggle-btn{display:none!important;}     /* ← from v1: hide burger */
 }
+
 @media(max-width:450px){
-  .main-content{padding:12px}
+  .main-content{padding:12px;}            /* extra squeeze (kept from v2) */
 }
+
 
 /* scope bar -------------------------------------------------------- */
 .scope-bar{flex-wrap:wrap}
