@@ -126,8 +126,7 @@ body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
 .sidebar:not(.collapsed) ~ .main-content {margin-left: var(--sidebar-width);}
 .nav-pills .nav-link{color:#495057;background:transparent;border-radius:.5rem;padding:.5rem 1rem;transition:.2s;margin-right:.5rem;}
 .nav-pills .nav-link:hover{background:rgba(var(--bs-primary-rgb),.1);color:var(--bs-primary);}
-.nav-pills .nav-link.active{background:var(--bs-primary);color:#fff;font-weight:600;}
-.category-card{box-shadow:0 .125rem .25rem rgba(0,0,0,.075);border-radius:.5rem;transition:.2s;}
+.nav-pills .nav-link.active{background:var(--bs-primary);color:#fff;font-weight:600;}.category-card{box-shadow:0 .125rem .25rem rgba(0,0,0,.075);border-radius:.5rem;transition:.2s;}
 .category-card:hover{transform:translateY(-4px);box-shadow:0 .5rem 1rem rgba(0,0,0,.15);}
 .btn-outline-danger:hover,.btn-outline-secondary:hover{background:var(--bs-primary);color:#fff;border-color:var(--bs-primary);}
 #notification{display:none;position:fixed;top:1rem;right:1rem;min-width:250px;z-index:1055;}

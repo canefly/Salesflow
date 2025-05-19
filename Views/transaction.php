@@ -85,15 +85,15 @@ while($r=$rs->fetch_assoc()){$cats[]=$r;}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-:root{--sidebar-width:250px;--sidebar-collapsed-width:70px;--c-bg:#f8f9fa;--c-surface:#fff;
-      --c-border:#e2e6ea;--c-text:#212529;--c-text-light:#6c757d;--c-blue:#0d6efd}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',sans-serif;background:var(--c-bg);color:var(--c-text);min-height:100vh;display:flex}
-.wrapper{display:flex;flex:1}
-@media(max-width:768px){.sidebar{display:none!important}.main-content{margin-left:0!important;padding:20px!important}}
-.sidebar{width:var(--sidebar-width);transition:.3s}.sidebar.collapsed{width:var(--sidebar-collapsed-width)}
-.main-content{flex:1;padding:40px;transition:margin-left .3s;margin-left:var(--sidebar-collapsed-width)}
-.sidebar:not(.collapsed)~.main-content{margin-left:var(--sidebar-width)}
+:root {--sidebar-width: 250px; --sidebar-collapsed-width: 70px;}
+    * {box-sizing: border-box;margin: 0;padding: 0;}
+body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
+.wrapper{display: flex;min-height: 100vh;}
+@media(max-width: 768px) {.sidebar {display: none !important;}.main-content {margin-left: 0 !important;padding: 20px !important;}.toggle-btn {display: none !important;}}
+.sidebar{width: var(--sidebar-width);transition: width 0.3s ease;}
+.sidebar.collapsed {width: var(--sidebar-collapsed-width);}
+.main-content { flex: 1;padding: 40px;transition: margin-left 0.3s ease;margin-left: var(--sidebar-collapsed-width);}
+.sidebar:not(.collapsed) ~ .main-content {margin-left: var(--sidebar-width);}
 .header-bar{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
 .header-bar button{background:none;border:none;color:var(--c-blue);font-size:1.3rem;cursor:pointer}
 .summary{background:var(--c-surface);border:1px solid var(--c-border);padding:12px 20px;border-radius:12px;

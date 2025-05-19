@@ -101,13 +101,15 @@ $s->close();
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-:root{--side:250px;--mini:70px}
-body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#333;margin:0}
-.wrapper{display:flex;min-height:100vh}
-.sidebar{width:var(--side);transition:width .3s}
-.sidebar.collapsed{width:var(--mini)}
-.main-content{flex:1;padding:40px;transition:margin-left .3s;margin-left:var(--mini)}
-.sidebar:not(.collapsed)~.main-content{margin-left:var(--side)}
+:root {--sidebar-width: 250px; --sidebar-collapsed-width: 70px;}
+    * {box-sizing: border-box;margin: 0;padding: 0;}
+body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
+.wrapper{display: flex;min-height: 100vh;}
+@media(max-width: 768px) {.sidebar {display: none !important;}.main-content {margin-left: 0 !important;padding: 20px !important;}.toggle-btn {display: none !important;}}
+.sidebar{width: var(--sidebar-width);transition: width 0.3s ease;}
+.sidebar.collapsed {width: var(--sidebar-collapsed-width);}
+.main-content { flex: 1;padding: 40px;transition: margin-left 0.3s ease;margin-left: var(--sidebar-collapsed-width);}
+.sidebar:not(.collapsed) ~ .main-content {margin-left: var(--sidebar-width);}
 .shortcut-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
                gap:1rem;max-width:800px;margin-top:2rem}
 .shortcut-button{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
