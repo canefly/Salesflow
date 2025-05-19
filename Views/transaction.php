@@ -1,6 +1,6 @@
 <?php
 /*────────────────────────────────────────────────────────────────────────────
-  SALESFLOW ‑ INCOME LOG  (single‑file UI + fetch + edit + single/bulk delete)
+  SALESFLOW - INCOME LOG  (single-file UI + fetch + edit + single/bulk delete)
 ────────────────────────────────────────────────────────────────────────────*/
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
   header("Location: ../Views/login.php");
   exit;
 }
-require_once '../Database/connection.php'; // ‑> mysqli $conn
+require_once '../Database/connection.php'; // -> mysqli $conn
 $user_id = $_SESSION['user_id'];
 
 /*============================= AJAX ENDPOINTS =============================*/
@@ -168,21 +168,21 @@ body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
   <div class="modal-header"><h5 class="modal-title">Edit Sale</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
   <div class="modal-body">
-    <input type="hidden" id="saleId">
+    <input type="hidden" id="saleId" name="id">
     <div class="mb-3"><label class="form-label">Product</label>
-      <input type="text" class="form-control" id="prodInput" required></div>
+      <input type="text" class="form-control" id="prodInput" name="product" required></div>
     <div class="mb-3"><label class="form-label">Category</label>
-      <select class="form-select" id="catSelect" required></select></div>
+      <select class="form-select" id="catSelect" name="category_id" required></select></div>
     <div class="row">
       <div class="col-6 mb-3"><label class="form-label">Quantity</label>
-        <input type="number" class="form-control" id="qtyInput" min="1" required></div>
+        <input type="number" class="form-control" id="qtyInput" name="quantity" min="1" required></div>
       <div class="col-6 mb-3"><label class="form-label">Unit Price (₱)</label>
         <input type="number" class="form-control" id="unitPriceInput" step="0.01" min="0" required></div>
     </div>
     <div class="mb-3"><label class="form-label">Total Amount</label>
       <input type="text" class="form-control" id="totalAmountDisplay" readonly></div>
     <div class="mb-3"><label class="form-label">Date & Time</label>
-      <input type="datetime-local" class="form-control" id="dtInput" required></div>
+      <input type="datetime-local" class="form-control" id="dtInput" name="datetime" required></div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -350,7 +350,7 @@ listEl.addEventListener('change',e=>{
   delSelBtn.classList.toggle('d-none', selectedIDs.size===0);
 });
 
-/*=========== MULTI‑SELECT TOGGLE ===========*/
+/*=========== MULTI-SELECT TOGGLE ===========*/
 multiBtn.onclick = ()=>{
   selectMode = !selectMode;
   selectedIDs.clear();
@@ -367,7 +367,7 @@ multiBtn.onclick = ()=>{
 function updateTotal(){ totDispEl.value = fmtPeso(qtyEl.value*unitEl.value); }
 qtyEl.addEventListener('input',updateTotal); unitEl.addEventListener('input',updateTotal);
 
-document.getElementById('editForm').addEventListener('submit',async e=>{
+document.getElementById('editForm').addEventListener('submit', async function(e){
   e.preventDefault();
   const fd = new FormData(this);
   fd.append('action','update');
