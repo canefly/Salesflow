@@ -114,10 +114,6 @@ if (isset($_SESSION['user_id'])) {
 
     <div class="text-center mt-3">or</div>
 
-    <a href="../backend/google_login.php" class="btn btn-outline-dark mt-3">
-      <i class="fab fa-google"></i> Login with Google
-    </a>
-
     <a href="register.php" class="text-link">New here? Create an account</a>
   </div>
 
