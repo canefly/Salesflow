@@ -83,13 +83,23 @@ if (isset($_GET['action'])) {
     /* add sale — takes sale_date from front-end */
     if ($a === 'add_sale') {
         $product = trim($_POST['product'] ?? '');
-        $qty     = (int)$_POST['qty'];
-        $amount  = (float)$_POST['amount'];
-        $cid     = (int)$_POST['category_id'];
-        $sdate   = trim($_POST['sale_date'] ?? '');                 // ISO string or empty
-        if ($product===''||$qty<=0||$amount<=0||$cid<=0)
+        $qty     = (int)($_POST['qty'] ?? 0);
+        $amount  = (float)($_POST['amount'] ?? 0);
+        $cid     = (int)($_POST['category_id'] ?? 0);
+        $sdate   = trim($_POST['sale_date'] ?? '');
+
+        if ($product==='' || $qty<=0 || $amount<=0 || $cid<=0) {
             die(json_encode(['status'=>'error','message'=>'Invalid data']));
-        if ($sdate === '') $sdate = date('Y-m-d H:i:s');
+        }
+
+        /* normalise / fallback */
+        if ($sdate === '') {
+            $sdate = date('Y-m-d H:i:s');
+        } else {
+            $ts = strtotime($sdate);
+            if ($ts === false) $sdate = date('Y-m-d H:i:s');
+            else               $sdate = date('Y-m-d H:i:s', $ts);
+        }
 
         $stmt=$conn->prepare(
             "INSERT INTO sales (user_id, category_id, product_name, quantity, total_amount, sale_date)
@@ -116,17 +126,22 @@ if (isset($_GET['action'])) {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
 :root {--sidebar-width: 250px; --sidebar-collapsed-width: 70px;}
-    * {box-sizing: border-box;margin: 0;padding: 0;}
-body {font-family: 'Poppins', sans-serif;background: #f5f5f5;color: #333;}
-.wrapper{display: flex;min-height: 100vh;}
-@media(max-width: 768px) {.sidebar {display: none !important;}.main-content {margin-left: 0 !important;padding: 20px !important;}.toggle-btn {display: none !important;}}
-.sidebar{width: var(--sidebar-width);transition: width 0.3s ease;}
-.sidebar.collapsed {width: var(--sidebar-collapsed-width);}
-.main-content { flex: 1;padding: 40px;transition: margin-left 0.3s ease;margin-left: var(--sidebar-collapsed-width);}
-.sidebar:not(.collapsed) ~ .main-content {margin-left: var(--sidebar-width);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#333;}
+.wrapper{display:flex;min-height:100vh;}
+@media(max-width:768px){
+  .sidebar{display:none!important;}
+  .main-content{margin-left:0!important;padding:20px!important;}
+  .toggle-btn{display:none!important;}
+}
+.sidebar{width:var(--sidebar-width);transition:width .3s ease;}
+.sidebar.collapsed{width:var(--sidebar-collapsed-width);}
+.main-content{flex:1;padding:40px;transition:margin-left .3s ease;margin-left:var(--sidebar-collapsed-width);}
+.sidebar:not(.collapsed)~.main-content{margin-left:var(--sidebar-width);}
 .nav-pills .nav-link{color:#495057;background:transparent;border-radius:.5rem;padding:.5rem 1rem;transition:.2s;margin-right:.5rem;}
 .nav-pills .nav-link:hover{background:rgba(var(--bs-primary-rgb),.1);color:var(--bs-primary);}
-.nav-pills .nav-link.active{background:var(--bs-primary);color:#fff;font-weight:600;}.category-card{box-shadow:0 .125rem .25rem rgba(0,0,0,.075);border-radius:.5rem;transition:.2s;}
+.nav-pills .nav-link.active{background:var(--bs-primary);color:#fff;font-weight:600;}
+.category-card{box-shadow:0 .125rem .25rem rgba(0,0,0,.075);border-radius:.5rem;transition:.2s;}
 .category-card:hover{transform:translateY(-4px);box-shadow:0 .5rem 1rem rgba(0,0,0,.15);}
 .btn-outline-danger:hover,.btn-outline-secondary:hover{background:var(--bs-primary);color:#fff;border-color:var(--bs-primary);}
 #notification{display:none;position:fixed;top:1rem;right:1rem;min-width:250px;z-index:1055;}
@@ -358,14 +373,26 @@ const price=$('#unit-price'),
       dateDisp=$('#date-display'),
       datePicker=$('#date-picker');
 
-/* set today */
-const nowISO = new Date().toISOString().slice(0,16);
-dateDisp.value = new Date().toLocaleString('sv-SE',{hour12:false}).replace(' ',' Time: ');
-datePicker.value = nowISO;
+/* util to get local ISO (no TZ) */
+function nowISO(){
+  const d=new Date();
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  return d.toISOString().slice(0,19); // YYYY-MM-DDTHH:MM:SS
+}
+
+/* init today */
+dateDisp.value = nowISO().replace('T',' ');
+datePicker.value = nowISO().slice(0,16); // YYYY-MM-DDTHH:MM
 
 /* open calendar */
-$('#open-date').onclick=()=>{ datePicker.value = dateDisp.value; dateM.show(); };
-$('#date-save').onclick=()=>{ dateDisp.value = datePicker.value; dateM.hide(); };
+$('#open-date').onclick=()=>{
+  datePicker.value = dateDisp.value.replace(' ','T').slice(0,16);
+  dateM.show();
+};
+$('#date-save').onclick=()=>{
+  dateDisp.value = datePicker.value.replace('T',' ') + ':00';
+  dateM.hide();
+};
 
 /* total calc */
 function calcTotal(){
@@ -387,11 +414,12 @@ $('#income-form').onsubmit=e=>{
   data.append('product',$('#product-name').value);
   data.append('qty',qv); data.append('amount',total);
   data.append('category_id', sel.value);
-  data.append('sale_date', dateDisp.value);          // ISO string
+  data.append('sale_date', dateDisp.value); // YYYY-MM-DD HH:MM:SS
   fetch('?action=add_sale',{method:'POST',body:data})
     .then(r=>r.json()).then(j=>{
       j.status==='success'?( notify('Sale recorded'), e.target.reset(),
-                             totWrap.style.display='none', dateDisp.value=new Date().toLocaleString('sv-SE',{hour12:false}).replace(' ',' Time: '),
+                             totWrap.style.display='none',
+                             dateDisp.value=nowISO().replace('T',' '),
                              fetchCats() )
                           : notify(j.message);
     });
