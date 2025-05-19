@@ -1,6 +1,3 @@
- 
- 
-
 <!-- Floating Chat Button -->
 <button
   id="ai-chat-button"
@@ -61,479 +58,249 @@
 <!-- STYLES -->
 <style>
   /* Basic resets */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    padding: 0;
-  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; }
 
   /* Chat Toggle Button */
-  .chat-toggle-btn {
-    box-shadow: 0 0 12px rgba(13, 110, 253, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .chat-toggle-btn:hover {
-    transform: scale(1.04);
-    box-shadow: 0 4px 18px rgba(13, 110, 253, 0.3);
-  }
+  .chat-toggle-btn { box-shadow: 0 0 12px rgba(13,110,253,0.4); transition: transform .2s, box-shadow .2s; }
+  .chat-toggle-btn:hover { transform: scale(1.04); box-shadow: 0 4px 18px rgba(13,110,253,0.3); }
 
   /* Chat Panel */
-  .chat-panel {
-    right: 30px;
-    bottom: 100px;
-    width: 100%;
-    max-width: 420px;
-    height: 520px;
-    max-height: none;
-    background-color: #fff;
-    border-radius: 14px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    display: none;
-    flex-direction: column;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    opacity: 0;
-    transform: translateY(20px);
-    z-index: 9999;
-  }
-  .chat-panel.show-panel {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .chat-panel{ right:30px; bottom:100px; width:100%; max-width:420px; height:520px; background:#fff; border-radius:14px;
+    box-shadow:0 12px 24px rgba(0,0,0,.15); overflow:hidden; display:none; flex-direction:column;
+    transition:transform .3s, opacity .3s; opacity:0; transform:translateY(20px); z-index:9999;}
+  .chat-panel.show-panel{display:flex;opacity:1;transform:translateY(0);}
 
   /* Chat Header */
-  .chat-header {
-    background: #0d6efd;
-    color: #fff;
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-  }
+  .chat-header{background:#0d6efd;color:#fff;border-top-left-radius:14px;border-top-right-radius:14px;}
 
   /* Chat Body */
-  .chat-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 12px;
-    overflow-y: auto;
-    background-color: #fafafa;
-  }
+  .chat-body{display:flex;flex-direction:column;flex:1;padding:12px;overflow-y:auto;background:#fafafa;}
 
-  /* Chat Bubbles (Rounded Rectangle for multi-line) */
-  .chat-bubble {
-    display: inline-block;
-    align-self: flex-start; /* default for AI */
-    margin: 4px 0;
-    padding: 6px 12px; /* less vertical padding for smaller bubbles */
-    /* We will set border-radius dynamically via JS. */
-    max-width: 75%;
-    line-height: 1.3;
-    font-size: 0.95rem;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .chat-bubble.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  .chat-bubble.user {
-    align-self: flex-end;
-    background-color: #0d6efd;
-    color: #fff;
-    margin-right: 6px;
-    max-width: 60%;
-    text-align: left !important;
-  }
-  .chat-bubble.ai {
-    background-color: #ebebeb;
-    color: #000;
-  }
+  /* Chat Bubbles */
+  .chat-bubble{display:inline-block;align-self:flex-start;margin:4px 0;padding:6px 12px;max-width:75%;line-height:1.3;
+    font-size:.95rem;white-space:pre-wrap;word-wrap:break-word;opacity:0;transform:translateY(20px) scale(.95);
+    transition:opacity .3s, transform .3s;}
+  .chat-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+  .chat-bubble.user{align-self:flex-end;background:#0d6efd;color:#fff;margin-right:6px;max-width:60%;}
+  .chat-bubble.ai{background:#ebebeb;color:#000;}
+
+  /* Markdown headings inside bubbles */
+  .chat-bubble h1,
+  .chat-bubble h2,
+  .chat-bubble h3{margin:0 0 6px;font-weight:700;line-height:1.2;}
+  .chat-bubble h1{font-size:1.25rem;}
+  .chat-bubble h2{font-size:1.15rem;}
+  .chat-bubble h3{font-size:1.05rem;}
 
   /* Typing Indicator */
-  @keyframes blink {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 1; }
-  }
-  .typing-indicator span {
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    margin: 0 1px;
-    background-color: currentColor;
-    border-radius: 50%;
-    animation: blink 1s infinite;
-  }
-  .typing-indicator span:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  .typing-indicator span:nth-child(3) {
-    animation-delay: 0.4s;
-  }
+  @keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
+  .typing-indicator span{display:inline-block;width:5px;height:5px;margin:0 1px;background:currentColor;border-radius:50%;animation:blink 1s infinite;}
+  .typing-indicator span:nth-child(2){animation-delay:.2s;}
+  .typing-indicator span:nth-child(3){animation-delay:.4s;}
 
   /* Quick Messages */
-  .quick-messages {
-    border-top: 1px solid #ddd;
-  }
-  .quick-msg-btn {
-    font-size: 0.85rem;
-  }
+  .quick-messages{border-top:1px solid #ddd;}
+  .quick-msg-btn{font-size:.85rem;}
 
   /* Chat Footer */
-  .chat-footer {
-    border-top: 1px solid #ddd;
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
+  .chat-footer{border-top:1px solid #ddd;border-bottom-left-radius:14px;border-bottom-right-radius:14px;}
+
+  .quick-messages.hidden{display:none!important;}
+
+  #chat-send-btn{margin-left:10px;}
+  #chat-send-btn:hover{background:#0b5ed7;transform:scale(1.05);box-shadow:0 0 8px rgba(13,110,253,.3);}
+
+  .chat-bubble.disclaimer{display:grid;grid-template-columns:auto 1fr;align-items:flex-start;background:#eef6ff;color:#084298;
+    border:1px solid #b6d4fe;font-size:.88rem;padding:10px;border-radius:14px;max-width:95%;line-height:1.3;gap:10px;margin:4px 0;
+    align-self:center;text-align:justify;}
+  .chat-bubble.disclaimer i{margin-top:2px;font-size:1rem;}
+
+  /* Mobile */
+  @media(max-width:480px){
+    .chat-panel{right:15px;left:auto;bottom:90px;width:95vw;height:75vh;border-radius:16px;}
+    html,body{width:100%;max-width:100%;overflow-x:hidden;}
   }
 
-  .quick-messages.hidden {
-    display: none !important;
-  }
+  .chat-toggle-btn:active,#chat-send-btn:active,.quick-msg-btn:active{transform:scale(.95);filter:brightness(.95);}
+  .chat-toggle-btn,#chat-send-btn,.quick-msg-btn{transition:all .15s;}
 
-  #chat-send-btn {
-    margin-left: 10px;
-  }
-
-  #chat-send-btn:hover {
-    background-color: #0b5ed7;
-    transform: scale(1.05);
-    box-shadow: 0 0 8px rgba(13, 110, 253, 0.3);
-  }
-
-  .chat-bubble.disclaimer {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: flex-start;
-    background-color: #eef6ff;
-    color: #084298;
-    border: 1px solid #b6d4fe;
-    font-size: 0.88rem;
-    padding: 10px 10px 10px 8px;
-    border-radius: 14px;
-    max-width: 95%;
-    line-height: 1.30;
-    letter-spacing: 0.1px;
-    word-spacing: 0px;
-    gap: 10px;
-    margin: 4px 0;
-    align-self: center;
-    text-align: justify;
-    text-justify: inter-word;
-  }
-
-  .chat-bubble.disclaimer i {
-    margin-top: 2px;
-    font-size: 1rem;
-  }
-
-  /* Mobile responsive styling */
-  @media (max-width: 480px) {
-    .chat-panel {
-      right: 15px;
-      left: auto;
-      bottom: 90px;
-      width: 95vw;
-      max-width: 95vw;
-      border-radius: 16px;
-      height: 75vh;
-    }
-
-    html, body {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-  }
-
-  .chat-toggle-btn:active,
-  #chat-send-btn:active,
-  .quick-msg-btn:active {
-    transform: scale(0.95);
-    filter: brightness(0.95);
-  }
-
-  .chat-toggle-btn,
-  #chat-send-btn,
-  .quick-msg-btn {
-    transition: all 0.15s ease;
-  }
-
-  .cooldown-warning {
-    color: #dc3545;
-  }
-
-  @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-3px); }
-    50% { transform: translateX(3px); }
-    75% { transform: translateX(-3px); }
-    100% { transform: translateX(0); }
-  }
-
-  .shake {
-    animation: shake 0.3s ease;
-  }
+  .cooldown-warning{color:#dc3545;}
+  @keyframes shake{0%{transform:translateX(0);}25%{transform:translateX(-3px);}50%{transform:translateX(3px);}
+    75%{transform:translateX(-3px);}100%{transform:translateX(0);}}
+  .shake{animation:shake .3s;}
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const chatButton    = document.getElementById('ai-chat-button');
-    const chatPanel     = document.getElementById('ai-chat-panel');
-    const closeBtn      = document.getElementById('chat-close-btn');
-    const sendBtn       = document.getElementById('chat-send-btn');
-    const chatInput     = document.getElementById('chat-input');
-    const chatMessages  = document.getElementById('chat-messages');
-    const quickMsgCont  = document.querySelector('.quick-messages');
-    const quickMsgBtns  = document.querySelectorAll('.quick-msg-btn');
-    let recentMessages = [];
-    
-    let cooldown = false;
-    let cooldownSeconds = 5;
-    let cooldownInterval;
+document.addEventListener('DOMContentLoaded', () => {
+  /* ---------- DOM refs ---------- */
+  const chatButton   = document.getElementById('ai-chat-button');
+  const chatPanel    = document.getElementById('ai-chat-panel');
+  const closeBtn     = document.getElementById('chat-close-btn');
+  const sendBtn      = document.getElementById('chat-send-btn');
+  const chatInput    = document.getElementById('chat-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const quickMsgCont = document.querySelector('.quick-messages');
+  const quickMsgBtns = document.querySelectorAll('.quick-msg-btn');
 
-    // Auto-resize the chat input dynamically as the user types
-    function autoResizeTextArea(el) {
-      // Reset height to auto for proper measurement
-      el.style.height = 'auto';
-      let newHeight = el.scrollHeight;
-      const maxHeight = 150; // maximum height in pixels
-      
-      if (newHeight > maxHeight) {
-        newHeight = maxHeight;
-        el.style.overflowY = 'auto';
-      } else {
-        el.style.overflowY = 'hidden';
-      }
-      
-      el.style.height = newHeight + 'px';
-      
-      // Adjust border-radius dynamically: if single line (<=40px) use pill shape; else, use 16px
-      if (newHeight <= 40) {
-        el.style.setProperty('border-radius', '9999px', 'important');
-      } else {
-        el.style.setProperty('border-radius', '16px', 'important');
-      }
-    }
-    
-    chatInput.addEventListener('input', function() {
-      autoResizeTextArea(chatInput);
-    });
+  /* ---------- Cool-down state ---------- */
+  let recentMessages = [];
+  let cooldown = false;
+  const cooldownSeconds = 5;
+  let cooldownInterval;
 
-    // Toggle chat panel
-    chatButton.addEventListener('click', () => {
-      chatPanel.classList.toggle('show-panel');
-      if (chatPanel.classList.contains('show-panel')) {
-        setTimeout(() => chatInput.focus(), 200);
-      }
-    });
+  /* ---------- Markdown helper ---------- */
+  function formatMarkdown(raw){                 // escape HTML first
+    const esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // headers (#, ##, ###) at line start
+    let txt = esc.replace(/^### (.*)$/gm,'<h3>$1</h3>')
+                 .replace(/^## (.*)$/gm,'<h2>$1</h2>')
+                 .replace(/^# (.*)$/gm,'<h1>$1</h1>');
+    // bold **text**
+    txt = txt.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+    // italic *text* or _text_
+    txt = txt.replace(/\*(.*?)\*/g,'<em>$1</em>')
+             .replace(/_(.*?)_/g,'<em>$1</em>');
+    // line breaks
+    txt = txt.replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');
+    return txt;
+  }
 
-    // Close chat panel
-    closeBtn.addEventListener('click', () => {
-      chatPanel.classList.remove('show-panel');
-    });
+  /* ---------- Auto-resize input ---------- */
+  function autoResizeTextArea(el){
+    el.style.height='auto';
+    let h = el.scrollHeight, maxH = 150;
+    el.style.height = (h>maxH?maxH:h)+'px';
+    el.style.overflowY = h>maxH?'auto':'hidden';
+    el.style.setProperty('border-radius', h<=40?'9999px':'16px','important');
+  }
+  chatInput.addEventListener('input',()=>autoResizeTextArea(chatInput));
 
-    // Send on Enter (Shift+Enter for newline)
-    chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-
-    // Send on button click
-    sendBtn.addEventListener('click', () => {
-      if (cooldown) {
-        sendBtn.classList.add('shake');
-        setTimeout(() => sendBtn.classList.remove('shake'), 400);
-        return;
-      }
-      sendMessage();
-    });
-
-    // Quick message buttons auto-send when clicked
-    quickMsgBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        chatInput.value = btn.getAttribute('data-msg') || '';
-        sendMessage();
-      });
-    });
-
-    // Main send message function
-    function sendMessage() {
-      const now = Date.now();
-      recentMessages.push(now);
-      recentMessages = recentMessages.filter(ts => now - ts < 3000); // keep only messages in last 3s
-
-      if (recentMessages.length >= 5) {
-        recentMessages = []; // clear out after triggering
-        triggerCooldown();
-        return;
-      }
-      if (cooldown) return;
-
-      const userMessage = chatInput.value.trim();
-      if (!userMessage) return;
-
-      // Hide quick messages immediately on the first user message
-      if (quickMsgCont && !quickMsgCont.classList.contains('hidden')) {
-        quickMsgCont.classList.add('hidden');
-      }
-
-      // Create user bubble
-      const userBubble = createChatBubble(userMessage, 'user');
-      chatInput.value = '';
-      chatInput.style.height = 'auto';
-      chatInput.style.overflowY = 'hidden';
-      chatInput.style.setProperty('border-radius', '9999px', 'important');
-
-      
-
-      // Create a typing indicator bubble for AI
-      const typingBubble = createTypingBubble();
-
-      // Call your existing PHP endpoint
-      fetch('../include/chat.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage })
-      })
-      .then(res => res.json())
-      .then(data => {
-        typingBubble.textContent = data.reply;
-        typingBubble.classList.add('show');
-        setTimeout(() => {
-          finalizeBubble(typingBubble);
-        }, 0);
-      })
-      .catch(() => {
-        typingBubble.textContent = "⚠️ Error: Unable to reach AI server.";
-        typingBubble.classList.add('show');
-        setTimeout(() => {
-          finalizeBubble(typingBubble);
-        }, 0);
-      });
-    }
-
-    // Create a chat bubble (with fade-in)
-    function createChatBubble(message, sender = 'user') {
-      const bubble = document.createElement('div');
-      bubble.classList.add('chat-bubble', sender);
-      bubble.textContent = message;
-      chatMessages.appendChild(bubble);
-
-      // Trigger fade-in
-      setTimeout(() => bubble.classList.add('show'), 10);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      finalizeBubble(bubble);
-
-      return bubble;
-    }
-
-    // Finalize bubble appearance based on height
-    function finalizeBubble(bubble) {
-      // Wait for layout
-      setTimeout(() => {
-        const height = bubble.offsetHeight;
-        // If it’s short (single line), make it pill-like
-        if (height <= 50) {
-          bubble.style.borderRadius = '9999px';
-        } else {
-          // More lines, smaller radius
-          bubble.style.borderRadius = '16px';
-        }
-      }, 0);
-    }
-
-    // Create an AI typing indicator bubble
-    function createTypingBubble() {
-      const bubble = document.createElement('div');
-      bubble.classList.add('chat-bubble', 'ai');
-      
-      const indicator = document.createElement('div');
-      indicator.classList.add('typing-indicator');
-      indicator.innerHTML = '<span></span><span></span><span></span>';
-      bubble.appendChild(indicator);
-      
-      chatMessages.appendChild(bubble);
-      
-      // Trigger fade-in
-      setTimeout(() => bubble.classList.add('show'), 10);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      // Immediately finalize the bubble to adjust its border-radius
-      finalizeBubble(bubble);
-      
-      return bubble;
-    }
-
-    // Cooldown function
-    function triggerCooldown() {
-      cooldown = true;
-      let countdown = cooldownSeconds;
-
-      // Disable input and button
-      chatInput.disabled = true;
-      sendBtn.disabled = true;
-
-      // Create or update the warning message
-      let warning = document.getElementById('cooldown-warning');
-      if (!warning) {
-        warning = document.createElement('div');
-        warning.id = 'cooldown-warning';
-        warning.className = 'cooldown-warning text-danger text-center mt-1';
-        warning.style.fontSize = '0.8rem';
-        warning.style.transition = 'opacity 0.3s ease';
-        sendBtn.parentNode.insertBefore(warning, sendBtn.nextSibling);
-      }
-
-      // Change send button to padlock
-      sendBtn.innerHTML = '<i class="fas fa-lock"></i>';
-      sendBtn.classList.remove('btn-primary');
-      sendBtn.classList.add('btn-danger');
-
-      // Start countdown
-      warning.innerHTML = `<i class="fas fa-hourglass-half me-2 text-danger"></i> You're sending messages too fast. Try again in ${countdown}s...`;
-      cooldownInterval = setInterval(() => {
-        countdown--;
-        warning.innerHTML = `<i class="fas fa-hourglass-half me-2 text-danger"></i> You're sending messages too fast. Try again in ${countdown}s...`;
-        if (countdown <= 0) {
-          clearInterval(cooldownInterval);
-          cooldown = false;
-          warning.remove();
-          chatInput.disabled = false;
-          sendBtn.disabled = false;
-          sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-          sendBtn.classList.remove('btn-danger');
-          sendBtn.classList.add('btn-primary');
-        }
-      }, 1000);
-    }
-
-    // (Optional) AI greeting on load
-    const disclaimer = document.createElement('div');
-    disclaimer.className = 'chat-bubble disclaimer show';
-    disclaimer.innerHTML = '<i class="fas fa-info-circle me-2"></i> This is just an AI-generated suggestion please dont take it as professional advice. Always use your own judgment or consult an expert when needed.';
-    chatMessages.appendChild(disclaimer);
-    
-    createChatBubble("Hi there! How can I help you today?", "ai");
-    autoResizeTextArea(chatInput);
+  /* ---------- Panel open / close ---------- */
+  chatButton.addEventListener('click',()=>{
+    chatPanel.classList.toggle('show-panel');
+    if(chatPanel.classList.contains('show-panel')) setTimeout(()=>chatInput.focus(),200);
   });
+  closeBtn.addEventListener('click',()=>chatPanel.classList.remove('show-panel'));
+
+  /* ---------- Send via Enter ---------- */
+  chatInput.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+  });
+  /* ---------- Send button ---------- */
+  sendBtn.addEventListener('click',()=>{
+    if(cooldown){
+      sendBtn.classList.add('shake');setTimeout(()=>sendBtn.classList.remove('shake'),400);return;
+    }
+    sendMessage();
+  });
+
+  /* ---------- Quick messages ---------- */
+  quickMsgBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      chatInput.value = btn.dataset.msg||''; sendMessage();
+    });
+  });
+
+  /* ---------- Send core ---------- */
+  function sendMessage(){
+    const now = Date.now();
+    recentMessages = recentMessages.filter(t=>now-t<3000);
+    recentMessages.push(now);
+    if(recentMessages.length>=5){recentMessages=[];triggerCooldown();return;}
+    if(cooldown) return;
+
+    const userMessage = chatInput.value.trim();
+    if(!userMessage) return;
+    if(quickMsgCont && !quickMsgCont.classList.contains('hidden')) quickMsgCont.classList.add('hidden');
+
+    createChatBubble(userMessage,'user');
+    chatInput.value=''; autoResizeTextArea(chatInput);
+
+    const typingBubble = createTypingBubble();
+
+    fetch('../include/chat.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:userMessage})
+    })
+    .then(r=>r.json())
+    .then(d=>{
+      typingBubble.innerHTML = formatMarkdown(d.reply||'');
+      typingBubble.classList.add('show');
+      finalizeBubble(typingBubble);
+    })
+    .catch(()=>{
+      typingBubble.textContent='⚠️ Error: Unable to reach AI server.';
+      typingBubble.classList.add('show');
+      finalizeBubble(typingBubble);
+    });
+  }
+
+  /* ---------- Bubble helpers ---------- */
+  function createChatBubble(message,sender='user'){
+    const bubble=document.createElement('div');
+    bubble.classList.add('chat-bubble',sender);
+    bubble.innerHTML = formatMarkdown(message);
+    chatMessages.appendChild(bubble);
+    setTimeout(()=>bubble.classList.add('show'),10);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    finalizeBubble(bubble);
+    return bubble;
+  }
+
+  function createTypingBubble(){
+    const bubble=document.createElement('div');
+    bubble.classList.add('chat-bubble','ai');
+    const indicator=document.createElement('div');
+    indicator.classList.add('typing-indicator');
+    indicator.innerHTML='<span></span><span></span><span></span>';
+    bubble.appendChild(indicator);
+    chatMessages.appendChild(bubble);
+    setTimeout(()=>bubble.classList.add('show'),10);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    finalizeBubble(bubble);
+    return bubble;
+  }
+
+  function finalizeBubble(bubble){
+    setTimeout(()=>{
+      bubble.style.borderRadius = bubble.offsetHeight<=50?'9999px':'16px';
+    },0);
+  }
+
+  /* ---------- Cool-down ---------- */
+  function triggerCooldown(){
+    cooldown=true;let c=cooldownSeconds;
+    chatInput.disabled=sendBtn.disabled=true;
+    let warn=document.getElementById('cooldown-warning');
+    if(!warn){
+      warn=document.createElement('div');
+      warn.id='cooldown-warning';
+      warn.className='cooldown-warning text-center mt-1';
+      warn.style.fontSize='.8rem';
+      sendBtn.parentNode.insertBefore(warn,sendBtn.nextSibling);
+    }
+    sendBtn.innerHTML='<i class="fas fa-lock"></i>'; sendBtn.classList.replace('btn-primary','btn-danger');
+    warn.innerHTML=`<i class="fas fa-hourglass-half me-2"></i> Too fast. Try again in ${c}s…`;
+    cooldownInterval=setInterval(()=>{
+      c--; warn.innerHTML=`<i class="fas fa-hourglass-half me-2"></i> Too fast. Try again in ${c}s…`;
+      if(c<=0){clearInterval(cooldownInterval);cooldown=false;warn.remove();
+        chatInput.disabled=sendBtn.disabled=false;
+        sendBtn.innerHTML='<i class="fas fa-paper-plane"></i>'; sendBtn.classList.replace('btn-danger','btn-primary');}
+    },1000);
+  }
+
+  /* ---------- Initial disclaimer + greeting ---------- */
+  const disclaimer=document.createElement('div');
+  disclaimer.className='chat-bubble disclaimer show';
+  disclaimer.innerHTML='<i class="fas fa-info-circle me-2"></i> This is just an AI-generated suggestion. Always use your own judgment or consult an expert.';
+  chatMessages.appendChild(disclaimer);
+  createChatBubble('Hi there! How can I help you today?','ai');
+  autoResizeTextArea(chatInput);
+});
 </script>
 
-
-<!-- REQUIRED: Keep your existing references to Bootstrap & Font Awesome -->
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  rel="stylesheet"
-/>
- 
+<!-- Bootstrap & FontAwesome -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>

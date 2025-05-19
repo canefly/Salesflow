@@ -105,7 +105,7 @@ curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_HTTPHEADER => ["Content-Type: application/json"],
     CURLOPT_POSTFIELDS => json_encode($payload),
-    CURLOPT_TIMEOUT => 20,
+    CURLOPT_TIMEOUT => 120,
     CURLOPT_SSL_VERIFYPEER => false,
 ]);
 
